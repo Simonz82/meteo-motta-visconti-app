@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/site_background">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:tint="#ffffff"
+        android:contentDescription="@string/back" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/notifications_title"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- Mostrato solo se NON loggato -->
+    <LinearLayout
+        android:id="@+id/loggedOutGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications_login_required"
+            android:textColor="#9e9e9e"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnGoLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#00d4ff"
+            android:text="@string/login_button" />
+    </LinearLayout>
+
+    <!-- Mostrato solo se loggato -->
+    <LinearLayout
+        android:id="@+id/loggedInGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/checkAllerta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notif_allerta_meteo"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkFulmine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_fulmine_vicino"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkPioggia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_inizia_a_piovere"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_nuovo_record"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkAppUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_app_update"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/notif_time_window_title"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/notif_time_window_subtitle"
+            android:textColor="#9e9e9e"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notif_time_from"
+                android:textColor="#aaaaaa" />
+
+            <Button
+                android:id="@+id/btnOrarioDa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#1c1f24"
+                android:textColor="#ffffff"
+                android:text="08:00" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notif_time_to"
+                android:textColor="#aaaaaa" />
+
+            <Button
+                android:id="@+id/btnOrarioA"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#1c1f24"
+                android:textColor="#ffffff"
+                android:text="23:00" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="#00d4ff"
+            android:text="@string/save_button" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp" />
+
+</LinearLayout>
+</ScrollView>

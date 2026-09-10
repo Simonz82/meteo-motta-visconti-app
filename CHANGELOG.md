@@ -1,0 +1,72 @@
+# Changelog
+
+Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
+
+## v1.4.0 — 2026-09-10
+
+### Aggiunto
+- Integrazione completa Firebase Cloud Messaging: ricezione notifiche push, registrazione automatica del dispositivo al login, richiesta del permesso di notifica (Android 13+)
+- Migrazione del backend da file JSON a database SQLite vero e proprio
+
+### Sicurezza
+- Dati utente e chiavi private del backend spostati fuori dalla cartella pubblica del sito
+
+## v1.3.3 — 2026-09-10
+
+### Aggiunto
+- Controllo automatico degli aggiornamenti: l'app verifica da sola se è disponibile una versione più recente e propone il download, senza bisogno di controllare manualmente sul sito
+
+## v1.3.2 — 2026-09-10
+
+### Risolto
+- Crash della schermata Account quando la data di nascita non era ancora impostata
+
+## v1.3.1 — 2026-09-10
+
+### Aggiunto
+- Tracciamento analytics dedicato per distinguere le visite dall'app da quelle da browser
+
+## v1.3.0 — 2026-09-10
+
+### Aggiunto
+- Accesso con impronta digitale o riconoscimento del volto, dopo il primo login con password
+- Email ricordata automaticamente nella schermata di accesso
+- Data di nascita completa (giorno/mese/anno) in registrazione e nella schermata account
+- Selezione dell'orario delle notifiche tramite selettore digitabile al minuto, non più a step di un'ora
+
+## v1.2.2 — 2026-09-10
+
+### Aggiunto
+- Nome e cognome richiesti già in fase di registrazione
+- Campo note personali libere nella schermata account
+
+### Modificato
+- Rimossa l'etichetta fuorviante "(esci)" accanto al nome utente nel menu
+
+## v1.2.1 — 2026-09-10
+
+### Aggiunto
+- Vera schermata "Il mio account" (email, nome, cognome, dati modificabili, pulsante di uscita con conferma), al posto del logout immediato al tocco
+
+## v1.2.0 — 2026-09-10
+
+### Aggiunto
+- Recupero password dimenticata dalla schermata di accesso
+- Nuova categoria di notifica "Nuova versione app disponibile"
+- Fascia oraria configurabile per le notifiche (es. niente notifiche di notte)
+
+### Risolto
+- Il pulsante di download dell'APK cliccato da dentro l'app non avviava il download
+
+## v1.1.0
+
+### Aggiunto
+- Menu laterale (hamburger) con accesso a account, notifiche e informazioni
+- Schermate native di login/registrazione e gestione preferenze notifiche, collegate al backend
+- Icona dell'app definitiva
+
+## v1.0.0 – v1.0.2
+
+### Aggiunto
+- Prima versione pubblica: WebView a schermo intero sulla dashboard del sito, splash screen con immagine storica del paese
+- Aggiornamento in-place tramite APK scaricato dal sito, senza passare dal Play Store, mantenendo sempre la stessa chiave di firma

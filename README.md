@@ -1,0 +1,41 @@
+# 📱 Meteo Motta Visconti — App Android
+
+App Android nativa per la [Stazione Meteo di Motta Visconti](https://meteo.nas.vagitaly.it/) — mostra la stessa dashboard del sito web con registrazione opzionale per personalizzare le notifiche.
+
+🔗 **Sito web / progetto sorella:** [meteo-motta-visconti-web](https://github.com/Simonz82/meteo-motta-visconti-web)
+📲 **Download:** dal pulsante nel footer del [sito](https://meteo.nas.vagitaly.it/) — aggiornamento in-app automatico dopo la prima installazione
+
+## Cos'è
+
+Un'app nativa (Kotlin) che avvolge il sito in una WebView per la dashboard principale, con schermate completamente native per tutto ciò che riguarda l'account e le notifiche:
+
+- 🌦️ **Dashboard live** — stessa homepage del sito, sempre aggiornata
+- 👤 **Account opzionale** — email + password, non obbligatorio per usare l'app; nome, cognome e data di nascita facoltativi
+- 🔒 **Accesso biometrico** — impronta o volto per un accesso rapido, password cifrata con una chiave hardware del telefono (Android Keystore), utilizzabile solo dopo verifica biometrica live
+- 🔔 **Notifiche personalizzabili** — Allerta Meteo, Fulmine vicino (<5 km), Inizio pioggia, Nuovo record storico, Nuova versione app — ciascuna con fascia oraria configurabile, consegnate via Firebase Cloud Messaging
+- 🔄 **Aggiornamento automatico** — l'app stessa rileva quando è disponibile una versione più recente e propone il download, senza necessità del Play Store
+- 🔑 **Recupero password** — richiesta di reset via email
+
+## Stack tecnico
+
+Kotlin nativo, `WebView` per la dashboard, `AndroidX` (AppCompat, Material, Biometric, WebKit), Firebase Cloud Messaging per le notifiche push. Backend PHP + SQLite (non incluso in questo repository per motivi di privacy e sicurezza — vedi nota sotto).
+
+Nessun framework ibrido (Cordova/React Native): l'unica parte "web" è la dashboard stessa, identica al sito.
+
+## Changelog
+
+Le modifiche vengono registrate in [CHANGELOG.md](CHANGELOG.md).
+
+## Struttura del repository
+
+- `app/src/main/java/it/vagitaly/meteomottavisconti/` — codice sorgente Kotlin (schermate, client API, autenticazione biometrica, integrazione Firebase)
+- `app/src/main/res/` — layout, stringhe, icone
+- `app/src/main/AndroidManifest.xml` — permessi e componenti dichiarati
+
+## Nota
+
+Questo repository documenta il concept, l'architettura e l'evoluzione dell'app. **Non sono inclusi**: la chiave di firma (keystore), il file di configurazione Firebase (`google-services.json`), né il codice del backend (autenticazione, database, invio notifiche push) — quest'ultimo per gli stessi motivi di privacy/sicurezza del [progetto sorella](https://github.com/Simonz82/meteo-motta-visconti-web).
+
+---
+
+Sviluppato e curato da [Simonz82](https://t.me/Simonz82) · © 2026

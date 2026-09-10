@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Meteo Motta Visconti</string>
+    <string name="site_url">https://meteo.nas.vagitaly.it/</string>
+    <string name="menu_button_description">Apri menu</string>
+    <string name="menu_account_login">Accedi / Registrati</string>
+    <string name="back">Indietro</string>
+
+    <string name="login_title">Accedi</string>
+    <string name="register_title">Registrati</string>
+    <string name="login_subtitle">Accedi o registrati per personalizzare le notifiche</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Accedi</string>
+    <string name="register_button">Registrati</string>
+    <string name="switch_to_register">Non hai un account? Registrati</string>
+    <string name="switch_to_login">Hai già un account? Accedi</string>
+    <string name="login_success">Fatto!</string>
+    <string name="forgot_password">Password dimenticata?</string>
+    <string name="forgot_password_dialog_title">Recupera password</string>
+    <string name="forgot_password_dialog_message">Inserisci la tua email: ti manderemo un link per reimpostare la password.</string>
+    <string name="forgot_password_send">Invia</string>
+    <string name="forgot_password_sent">Se l\'email è registrata, riceverai a breve le istruzioni.</string>
+
+    <string name="error_invalid_email">Inserisci un\'email valida</string>
+    <string name="error_short_password">La password deve avere almeno 6 caratteri</string>
+    <string name="error_email_taken">Questa email è già registrata</string>
+    <string name="error_invalid_credentials">Email o password non corrette</string>
+    <string name="error_network">Errore di connessione, riprova</string>
+    <string name="error_generic">Si è verificato un errore</string>
+
+    <string name="notifications_title">Notifiche</string>
+    <string name="notifications_login_required">Per personalizzare le notifiche devi prima accedere o registrarti.</string>
+    <string name="notif_allerta_meteo">Allerta Meteo (Protezione Civile)</string>
+    <string name="notif_fulmine_vicino">Fulmine vicino (meno di 5 km)</string>
+    <string name="notif_inizia_a_piovere">Inizia a Piovere (rilevato da stazione)</string>
+    <string name="notif_nuovo_record">Nuovo Record Storico</string>
+    <string name="notif_app_update">Nuova versione app disponibile</string>
+    <string name="notif_time_window_title">Fascia oraria notifiche</string>
+    <string name="notif_time_window_subtitle">Fuori da questo orario non riceverai notifiche</string>
+    <string name="notif_time_from">Da</string>
+    <string name="notif_time_to">A</string>
+    <string name="notif_time_picker_title">Imposta orario</string>
+    <string name="save_button">Salva</string>
+    <string name="preferences_saved">Preferenze salvate</string>
+
+    <string name="account_title">Il mio account</string>
+    <string name="account_nome_hint">Nome</string>
+    <string name="account_cognome_hint">Cognome</string>
+    <string name="account_data_nascita_hint">Data di nascita</string>
+    <string name="account_note_hint">Note personali (facoltative)</string>
+    <string name="account_save_success">Dati salvati</string>
+    <string name="account_logout_button">Esci dall\'account</string>
+    <string name="account_logout_confirm_title">Uscire dall\'account?</string>
+    <string name="account_logout_confirm_message">Dovrai accedere di nuovo per personalizzare le notifiche.</string>
+    <string name="menu_account_login_logout_confirm">Esci</string>
+    <string name="error_invalid_birth_date">Data di nascita non valida</string>
+    <string name="session_expired_message">Sessione scaduta, accedi di nuovo</string>
+
+    <string name="biometric_login_button">Accedi con impronta o volto</string>
+    <string name="biometric_enable_dialog_title">Attiva accesso rapido</string>
+    <string name="biometric_enable_dialog_message">Vuoi usare impronta o volto per accedere più velocemente la prossima volta?</string>
+    <string name="biometric_enable_yes">Attiva</string>
+    <string name="biometric_enable_no">No, grazie</string>
+
+    <string name="update_available_title">Nuova versione disponibile</string>
+    <string name="update_available_message">È disponibile la versione %1$s. Vuoi scaricarla ora?</string>
+    <string name="update_download_now">Scarica ora</string>
+    <string name="update_later">Più tardi</string>
+
+    <string name="notif_channel_name">Allerte Meteo</string>
+    <string name="notif_channel_description">Notifiche push per allerte meteo, fulmini, pioggia e novità dell\'app</string>
+
+    <string name="about_developer">Sviluppato e curato da Simonz82</string>
+    <string name="about_version_format">Versione %1$s</string>
+    <string name="about_changelog_link">Vedi il changelog completo</string>
+</resources>

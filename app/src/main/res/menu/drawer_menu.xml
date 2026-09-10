@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_account"
+        android:title="@string/menu_account_login"
+        android:icon="@android:drawable/ic_menu_myplaces" />
+    <item
+        android:id="@+id/nav_notifications"
+        android:title="Notifiche"
+        android:icon="@android:drawable/ic_popup_reminder" />
+    <item
+        android:id="@+id/nav_theme"
+        android:title="Tema chiaro/scuro"
+        android:icon="@android:drawable/ic_menu_view" />
+    <item
+        android:id="@+id/nav_about"
+        android:title="Info app"
+        android:icon="@android:drawable/ic_menu_info_details" />
+</menu>

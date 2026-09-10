@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.MeteoMotta" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/site_background</item>
+        <item name="colorPrimary">@color/accent</item>
+        <item name="android:statusBarColor">@color/site_background</item>
+    </style>
+
+    <style name="Theme.MeteoMotta.Splash" parent="Theme.MeteoMotta">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>
