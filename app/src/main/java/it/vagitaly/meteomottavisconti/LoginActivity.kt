@@ -1,6 +1,5 @@
 package it.vagitaly.meteomottavisconti
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
@@ -10,12 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import java.util.Calendar
 
 class LoginActivity : AppCompatActivity() {
 
     private var isRegisterMode = false
-    private var dataNascita: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +22,13 @@ class LoginActivity : AppCompatActivity() {
         val passwordInput: EditText = findViewById(R.id.passwordInput)
         val nomeInput: EditText = findViewById(R.id.nomeInput)
         val cognomeInput: EditText = findViewById(R.id.cognomeInput)
-        val btnDataNascita: Button = findViewById(R.id.btnDataNascita)
+        val cittaInput: EditText = findViewById(R.id.cittaInput)
+        val dataNascitaLabel: TextView = findViewById(R.id.dataNascitaLabel)
+        val dataNascitaRow: android.widget.LinearLayout = findViewById(R.id.dataNascitaRow)
+        val dayInput: EditText = findViewById(R.id.dayInput)
+        val monthInput: EditText = findViewById(R.id.monthInput)
+        val yearInput: EditText = findViewById(R.id.yearInput)
+        DateInputHelper.setup(dayInput, monthInput, yearInput)
         val errorText: TextView = findViewById(R.id.errorText)
         val btnPrimary: Button = findViewById(R.id.btnPrimary)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
@@ -66,20 +69,15 @@ class LoginActivity : AppCompatActivity() {
             showForgotPasswordDialog(emailInput.text.toString().trim())
         }
 
-        btnDataNascita.setOnClickListener {
-            showDatePicker { picked ->
-                dataNascita = picked
-                btnDataNascita.text = formatDataDisplay(picked) ?: picked
-            }
-        }
-
         toggleModeText.setOnClickListener {
             isRegisterMode = !isRegisterMode
             errorText.visibility = TextView.GONE
             val visibility = if (isRegisterMode) EditText.VISIBLE else EditText.GONE
             nomeInput.visibility = visibility
             cognomeInput.visibility = visibility
-            btnDataNascita.visibility = visibility
+            dataNascitaLabel.visibility = visibility
+            dataNascitaRow.visibility = visibility
+            cittaInput.visibility = visibility
             if (isRegisterMode) {
                 titleText.text = getString(R.string.register_title)
                 btnPrimary.text = getString(R.string.register_button)
@@ -104,6 +102,26 @@ class LoginActivity : AppCompatActivity() {
             if (password.length < 6) {
                 showError(errorText, getString(R.string.error_short_password))
                 return@setOnClickListener
+            }
+            var dataNascita: String? = null
+            if (isRegisterMode) {
+                if (nomeInput.text.toString().trim().isEmpty()) {
+                    showError(errorText, getString(R.string.error_nome_required))
+                    return@setOnClickListener
+                }
+                if (cognomeInput.text.toString().trim().isEmpty()) {
+                    showError(errorText, getString(R.string.error_cognome_required))
+                    return@setOnClickListener
+                }
+                if (cittaInput.text.toString().trim().isEmpty()) {
+                    showError(errorText, getString(R.string.error_citta_required))
+                    return@setOnClickListener
+                }
+                dataNascita = DateInputHelper.combine(dayInput, monthInput, yearInput)
+                if (dataNascita == null) {
+                    showError(errorText, getString(R.string.error_birth_date_required))
+                    return@setOnClickListener
+                }
             }
 
             progressBar.visibility = ProgressBar.VISIBLE
@@ -132,6 +150,7 @@ class LoginActivity : AppCompatActivity() {
                     nomeInput.text.toString().trim(),
                     cognomeInput.text.toString().trim(),
                     dataNascita,
+                    cittaInput.text.toString().trim(),
                     onResult
                 )
             } else {
@@ -159,33 +178,6 @@ class LoginActivity : AppCompatActivity() {
             .setNegativeButton(R.string.biometric_enable_no) { _, _ -> finish() }
             .setOnCancelListener { finish() }
             .show()
-    }
-
-    private fun showDatePicker(onPicked: (String) -> Unit) {
-        val cal = Calendar.getInstance()
-        cal.set(2000, 0, 1)
-        try {
-            dataNascita?.split("-")?.takeIf { it.size == 3 }?.let { parts ->
-                cal.set(parts[0].toInt(), parts[1].toInt() - 1, parts[2].toInt())
-            }
-        } catch (e: Exception) {
-            // valore non valido: usa il default 2000-01-01 già impostato sopra
-        }
-        val dialog = DatePickerDialog(this, { _, year, month, day ->
-            onPicked(String.format("%04d-%02d-%02d", year, month + 1, day))
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
-        dialog.datePicker.maxDate = System.currentTimeMillis()
-        dialog.show()
-    }
-
-    private fun formatDataDisplay(iso: String): String? {
-        val parts = iso.split("-")
-        if (parts.size != 3) return null
-        return try {
-            "${parts[2].toInt().toString().padStart(2, '0')}/${parts[1].toInt().toString().padStart(2, '0')}/${parts[0]}"
-        } catch (e: Exception) {
-            null
-        }
     }
 
     private fun showForgotPasswordDialog(prefillEmail: String) {
@@ -226,6 +218,10 @@ class LoginActivity : AppCompatActivity() {
         "email_already_registered" -> getString(R.string.error_email_taken)
         "invalid_credentials" -> getString(R.string.error_invalid_credentials)
         "network_error" -> getString(R.string.error_network)
+        "nome_required" -> getString(R.string.error_nome_required)
+        "cognome_required" -> getString(R.string.error_cognome_required)
+        "birth_date_required" -> getString(R.string.error_birth_date_required)
+        "citta_required" -> getString(R.string.error_citta_required)
         else -> getString(R.string.error_generic)
     }
 }

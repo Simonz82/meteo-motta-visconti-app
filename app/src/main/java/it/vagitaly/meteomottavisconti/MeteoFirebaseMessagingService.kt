@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -26,13 +27,20 @@ class MeteoFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         val title = message.notification?.title ?: message.data["title"] ?: getString(R.string.app_name)
         val body = message.notification?.body ?: message.data["body"] ?: ""
-        showNotification(title, body)
+        val downloadUrl = message.data["download_url"]
+        showNotification(title, body, downloadUrl)
     }
 
-    private fun showNotification(title: String, body: String) {
+    private fun showNotification(title: String, body: String, downloadUrl: String? = null) {
         createChannelIfNeeded()
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        // Se il messaggio porta un link di download diretto (es. nuova versione app),
+        // il tocco sulla notifica avvia subito il download invece di aprire l'app.
+        val intent = if (!downloadUrl.isNullOrEmpty()) {
+            Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrl))
+        } else {
+            Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
         }
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,

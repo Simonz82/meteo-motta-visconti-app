@@ -46,10 +46,10 @@ object ApiClient {
         }.start()
     }
 
-    fun register(email: String, password: String, nome: String, cognome: String, dataNascita: String?, callback: (ApiResult) -> Unit) {
+    fun register(email: String, password: String, nome: String, cognome: String, dataNascita: String?, citta: String, callback: (ApiResult) -> Unit) {
         runAsync({
             val body = JSONObject().put("email", email).put("password", password)
-                .put("nome", nome).put("cognome", cognome)
+                .put("nome", nome).put("cognome", cognome).put("citta", citta)
                 .put("data_nascita", dataNascita ?: JSONObject.NULL)
             request("/register.php", "POST", body, null)
         }, callback)
@@ -81,9 +81,10 @@ object ApiClient {
         runAsync({ request("/account.php", "GET", null, token) }, callback)
     }
 
-    fun updateAccount(token: String, nome: String, cognome: String, dataNascita: String?, note: String, callback: (ApiResult) -> Unit) {
+    fun updateAccount(token: String, nome: String, cognome: String, dataNascita: String?, citta: String, note: String, callback: (ApiResult) -> Unit) {
         runAsync({
             val body = JSONObject().put("nome", nome).put("cognome", cognome).put("note", note)
+                .put("citta", citta)
                 .put("data_nascita", dataNascita ?: JSONObject.NULL)
             request("/account.php", "POST", body, token)
         }, callback)

@@ -61,14 +61,94 @@
             android:backgroundTint="#00d4ff"
             android:visibility="gone" />
 
-        <Button
-            android:id="@+id/btnDataNascita"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/dataNascitaLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/account_data_nascita_hint"
-            android:textColor="#777777"
-            android:backgroundTint="#1c1f24"
+            android:textColor="#9e9e9e"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/dataNascitaRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/dayInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/date_day_hint"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textColor="#9e9e9e"
+                android:textSize="18sp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp" />
+
+            <EditText
+                android:id="@+id/monthInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/date_month_hint"
+                android:inputType="number"
+                android:maxLength="2"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textColor="#9e9e9e"
+                android:textSize="18sp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp" />
+
+            <EditText
+                android:id="@+id/yearInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="@string/date_year_hint"
+                android:inputType="number"
+                android:maxLength="4"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/cittaInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/account_citta_hint"
+            android:inputType="textCapWords"
+            android:textColor="#ffffff"
+            android:textColorHint="#777777"
+            android:backgroundTint="#00d4ff"
             android:visibility="gone" />
 
         <EditText

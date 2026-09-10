@@ -2,6 +2,36 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.5.1 — 2026-09-11
+
+### Aggiunto
+- Nuova icona dell'app
+- Nella schermata Info, indicazione se è disponibile una versione più recente rispetto a quella installata, con pulsante di download diretto
+- Città di residenza richiesta in fase di registrazione (in vista di funzioni future legate alla localizzazione)
+
+### Modificato
+- L'accesso con impronta/volto resta attivo anche dopo il logout — non ha senso richiedere di reinserire la password ogni volta per un'app meteo
+
+## v1.5.0 — 2026-09-10
+
+### Modificato
+- Data di nascita: sostituito il selettore calendario con tre campi digitabili (giorno/mese/anno) con avanzamento automatico — più veloce da compilare
+
+## v1.4.3 — 2026-09-10
+
+### Risolto
+- Estensioni PHP mancanti sul server (OpenSSL, cURL) che impedivano l'invio effettivo delle notifiche push
+
+## v1.4.2 — 2026-09-10
+
+### Aggiunto
+- Le notifiche di aggiornamento app aprono ora direttamente il link di download al tocco, invece di limitarsi ad aprire l'app
+
+## v1.4.1 — 2026-09-10
+
+### Aggiunto
+- Prima notifica push realmente recapitata (categoria "Nuova versione app disponibile")
+
 ## v1.4.0 — 2026-09-10
 
 ### Aggiunto

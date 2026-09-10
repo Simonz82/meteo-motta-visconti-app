@@ -1,6 +1,5 @@
 package it.vagitaly.meteomottavisconti
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,11 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import java.util.Calendar
 
 class AccountActivity : AppCompatActivity() {
-
-    private var dataNascita: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +21,11 @@ class AccountActivity : AppCompatActivity() {
         val emailText = findViewById<TextView>(R.id.emailText)
         val nomeInput = findViewById<EditText>(R.id.nomeInput)
         val cognomeInput = findViewById<EditText>(R.id.cognomeInput)
-        val btnDataNascita = findViewById<Button>(R.id.btnDataNascita)
+        val cittaInput = findViewById<EditText>(R.id.cittaInput)
+        val dayInput = findViewById<EditText>(R.id.dayInput)
+        val monthInput = findViewById<EditText>(R.id.monthInput)
+        val yearInput = findViewById<EditText>(R.id.yearInput)
+        DateInputHelper.setup(dayInput, monthInput, yearInput)
         val noteInput = findViewById<EditText>(R.id.noteInput)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val contentGroup = findViewById<android.widget.LinearLayout>(R.id.contentGroup)
@@ -39,24 +39,16 @@ class AccountActivity : AppCompatActivity() {
             return
         }
 
-        btnDataNascita.setOnClickListener {
-            showDatePicker { picked ->
-                dataNascita = picked
-                btnDataNascita.text = formatDataDisplay(picked) ?: picked
-            }
-        }
-
         ApiClient.getAccount(token) { result ->
             progressBar.visibility = android.view.View.GONE
             if (result.success) {
                 emailText.text = result.json.optString("email")
                 nomeInput.setText(result.json.optString("nome", ""))
                 cognomeInput.setText(result.json.optString("cognome", ""))
+                cittaInput.setText(result.json.optString("citta", ""))
                 val data = result.json.optString("data_nascita", "")
-                val display = formatDataDisplay(data)
-                if (display != null) {
-                    dataNascita = data
-                    btnDataNascita.text = display
+                if (data.isNotEmpty()) {
+                    DateInputHelper.populate(data, dayInput, monthInput, yearInput)
                 }
                 noteInput.setText(result.json.optString("note", ""))
                 contentGroup.visibility = android.view.View.VISIBLE
@@ -71,10 +63,21 @@ class AccountActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             val nome = nomeInput.text.toString().trim()
             val cognome = cognomeInput.text.toString().trim()
+            val citta = cittaInput.text.toString().trim()
             val note = noteInput.text.toString().trim()
+            val dataNascita = if (DateInputHelper.isEmpty(dayInput, monthInput, yearInput)) {
+                null
+            } else {
+                val combined = DateInputHelper.combine(dayInput, monthInput, yearInput)
+                if (combined == null) {
+                    Toast.makeText(this, getString(R.string.error_invalid_birth_date), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                combined
+            }
 
             btnSave.isEnabled = false
-            ApiClient.updateAccount(token, nome, cognome, dataNascita, note) { result ->
+            ApiClient.updateAccount(token, nome, cognome, dataNascita, citta, note) { result ->
                 btnSave.isEnabled = true
                 if (result.success) {
                     Toast.makeText(this, getString(R.string.account_save_success), Toast.LENGTH_SHORT).show()
@@ -93,43 +96,14 @@ class AccountActivity : AppCompatActivity() {
                 .setTitle(R.string.account_logout_confirm_title)
                 .setMessage(R.string.account_logout_confirm_message)
                 .setPositiveButton(R.string.menu_account_login_logout_confirm) { _, _ ->
+                    // L'accesso biometrico resta attivo dopo il logout: e' un'app
+                    // meteo, non serve richiedere di nuovo la password ogni volta.
                     AccountManager.logout(this)
-                    BiometricAuth.disable(this)
                     Toast.makeText(this, "Disconnesso", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
-        }
-    }
-
-    private fun showDatePicker(onPicked: (String) -> Unit) {
-        val cal = Calendar.getInstance()
-        cal.set(2000, 0, 1)
-        try {
-            dataNascita?.split("-")?.takeIf { it.size == 3 }?.let { parts ->
-                cal.set(parts[0].toInt(), parts[1].toInt() - 1, parts[2].toInt())
-            }
-        } catch (e: Exception) {
-            // valore non valido: usa il default 2000-01-01 già impostato sopra
-        }
-        val dialog = DatePickerDialog(this, { _, year, month, day ->
-            onPicked(String.format("%04d-%02d-%02d", year, month + 1, day))
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH))
-        dialog.datePicker.maxDate = System.currentTimeMillis()
-        dialog.show()
-    }
-
-    // Ritorna null se "iso" non è una data completa valida (es. valore vuoto o malformato),
-    // cosi' il chiamante puo' scegliere di non mostrare nulla invece di andare in crash.
-    private fun formatDataDisplay(iso: String): String? {
-        val parts = iso.split("-")
-        if (parts.size != 3) return null
-        return try {
-            "${parts[2].toInt()}".padStart(2, '0') + "/" +
-                "${parts[1].toInt()}".padStart(2, '0') + "/" + parts[0]
-        } catch (e: Exception) {
-            null
         }
     }
 

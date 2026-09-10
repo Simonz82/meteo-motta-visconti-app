@@ -44,9 +44,13 @@
     <string name="preferences_saved">Preferenze salvate</string>
 
     <string name="account_title">Il mio account</string>
-    <string name="account_nome_hint">Nome</string>
-    <string name="account_cognome_hint">Cognome</string>
-    <string name="account_data_nascita_hint">Data di nascita</string>
+    <string name="account_nome_hint">Nome *</string>
+    <string name="account_cognome_hint">Cognome *</string>
+    <string name="account_data_nascita_hint">Data di nascita *</string>
+    <string name="account_citta_hint">Città di residenza *</string>
+    <string name="date_day_hint">GG</string>
+    <string name="date_month_hint">MM</string>
+    <string name="date_year_hint">AAAA</string>
     <string name="account_note_hint">Note personali (facoltative)</string>
     <string name="account_save_success">Dati salvati</string>
     <string name="account_logout_button">Esci dall\'account</string>
@@ -54,6 +58,10 @@
     <string name="account_logout_confirm_message">Dovrai accedere di nuovo per personalizzare le notifiche.</string>
     <string name="menu_account_login_logout_confirm">Esci</string>
     <string name="error_invalid_birth_date">Data di nascita non valida</string>
+    <string name="error_nome_required">Il nome è obbligatorio</string>
+    <string name="error_cognome_required">Il cognome è obbligatorio</string>
+    <string name="error_birth_date_required">La data di nascita è obbligatoria</string>
+    <string name="error_citta_required">La città di residenza è obbligatoria</string>
     <string name="session_expired_message">Sessione scaduta, accedi di nuovo</string>
 
     <string name="biometric_login_button">Accedi con impronta o volto</string>
@@ -73,4 +81,6 @@
     <string name="about_developer">Sviluppato e curato da Simonz82</string>
     <string name="about_version_format">Versione %1$s</string>
     <string name="about_changelog_link">Vedi il changelog completo</string>
+    <string name="about_up_to_date">Hai già l\'ultima versione disponibile</string>
+    <string name="about_update_available">Nuova versione disponibile: %1$s (la tua è %2$s)</string>
 </resources>

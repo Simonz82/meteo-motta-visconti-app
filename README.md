@@ -10,7 +10,7 @@ App Android nativa per la [Stazione Meteo di Motta Visconti](https://meteo.nas.v
 Un'app nativa (Kotlin) che avvolge il sito in una WebView per la dashboard principale, con schermate completamente native per tutto ciò che riguarda l'account e le notifiche:
 
 - 🌦️ **Dashboard live** — stessa homepage del sito, sempre aggiornata
-- 👤 **Account opzionale** — email + password, non obbligatorio per usare l'app; nome, cognome e data di nascita facoltativi
+- 👤 **Account opzionale** — non obbligatorio per usare l'app; se ci si registra, servono email, password, nome, cognome, data di nascita e città di residenza
 - 🔒 **Accesso biometrico** — impronta o volto per un accesso rapido, password cifrata con una chiave hardware del telefono (Android Keystore), utilizzabile solo dopo verifica biometrica live
 - 🔔 **Notifiche personalizzabili** — Allerta Meteo, Fulmine vicino (<5 km), Inizio pioggia, Nuovo record storico, Nuova versione app — ciascuna con fascia oraria configurabile, consegnate via Firebase Cloud Messaging
 - 🔄 **Aggiornamento automatico** — l'app stessa rileva quando è disponibile una versione più recente e propone il download, senza necessità del Play Store
