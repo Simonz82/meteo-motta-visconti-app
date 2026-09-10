@@ -13,6 +13,7 @@ Un'app nativa (Kotlin) che avvolge il sito in una WebView per la dashboard princ
 - 👤 **Account opzionale** — non obbligatorio per usare l'app; se ci si registra, servono email, password, nome, cognome, data di nascita e città di residenza
 - 🔒 **Accesso biometrico** — impronta o volto per un accesso rapido, password cifrata con una chiave hardware del telefono (Android Keystore), utilizzabile solo dopo verifica biometrica live
 - 🔔 **Notifiche personalizzabili** — Allerta Meteo, Fulmine vicino (<5 km), Inizio pioggia, Nuovo record storico, Nuova versione app — ciascuna con fascia oraria configurabile, consegnate via Firebase Cloud Messaging
+- 🎨 **Temi selezionabili** — Scuro (predefinito), Chiaro, Black (AMOLED), Blu, Green, Pink, Red
 - 🔄 **Aggiornamento automatico** — l'app stessa rileva quando è disponibile una versione più recente e propone il download, senza necessità del Play Store
 - 🔑 **Recupero password** — richiesta di reset via email
 

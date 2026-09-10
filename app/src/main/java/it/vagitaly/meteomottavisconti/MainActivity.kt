@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.nav_notifications -> startActivity(android.content.Intent(this, NotificationSettingsActivity::class.java))
-                R.id.nav_theme -> showComingSoon("Tema chiaro/scuro")
+                R.id.nav_theme -> showThemePicker()
                 R.id.nav_about -> startActivity(android.content.Intent(this, AboutActivity::class.java))
             }
             true
@@ -133,6 +133,33 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "$feature — disponibile in una prossima versione", Toast.LENGTH_SHORT).show()
     }
 
+    // Elenco temi disponibili: applicato subito alla WebView già caricata,
+    // e ri-applicato automaticamente ad ogni pagina successiva (onPageFinished).
+    private fun showThemePicker() {
+        val keys = ThemeManager.THEMES.keys.toList()
+        val labels = ThemeManager.THEMES.values.toTypedArray()
+        val current = ThemeManager.getTheme(this)
+        val checkedIndex = keys.indexOf(current).coerceAtLeast(0)
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.theme_picker_title))
+            .setSingleChoiceItems(labels, checkedIndex) { dialog, which ->
+                val chosen = keys[which]
+                ThemeManager.setTheme(this, chosen)
+                applyThemeToWebView(chosen)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.dialog_cancel), null)
+            .show()
+    }
+
+    private fun applyThemeToWebView(theme: String) {
+        webView.evaluateJavascript(
+            "if (window.setAppTheme) { window.setAppTheme('$theme'); }",
+            null
+        )
+    }
+
     private fun setupWebView() {
         val settings = webView.settings
         settings.javaScriptEnabled = true
@@ -160,6 +187,7 @@ class MainActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView, url: String?) {
                 super.onPageFinished(view, url)
                 swipeRefresh.isRefreshing = false
+                applyThemeToWebView(ThemeManager.getTheme(this@MainActivity))
             }
         }
 

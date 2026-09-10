@@ -10,7 +10,7 @@
         android:icon="@android:drawable/ic_popup_reminder" />
     <item
         android:id="@+id/nav_theme"
-        android:title="Tema chiaro/scuro"
+        android:title="Tema"
         android:icon="@android:drawable/ic_menu_view" />
     <item
         android:id="@+id/nav_about"

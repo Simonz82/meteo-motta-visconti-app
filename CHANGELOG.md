@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.6.0 — 2026-09-11
+
+### Aggiunto
+- Selettore tema dal menu laterale ("Tema"): Scuro (predefinito), Chiaro, Black (AMOLED), Blu, Green, Pink, Red. La scelta viene applicata alla dashboard e salvata sul dispositivo
+
 ## v1.5.1 — 2026-09-11
 
 ### Aggiunto
