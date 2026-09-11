@@ -113,4 +113,7 @@
     <string name="error_same_email">È già la tua email attuale</string>
     <string name="error_email_already_used">Questa email è già usata da un altro account</string>
     <string name="error_too_many_attempts">Troppi tentativi, riprova tra qualche minuto</string>
+
+    <string name="account_edit_field">Modifica</string>
+    <string name="account_age_format">%1$d anni</string>
 </resources>

@@ -2,6 +2,19 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.0 — 2026-09-11
+
+### Aggiunto
+- Nella schermata Account: eta' calcolata automaticamente a fianco della data di nascita
+- Nome, cognome e citta' (registrazione e Account) vengono capitalizzati automaticamente (prima lettera di ogni parola maiuscola), anche se digitati tutto minuscolo
+
+### Modificato
+- Nella schermata Account, nome/cognome/data di nascita/citta' partono bloccati (mostrano il valore ma non si modificano per sbaglio) con un link "Modifica" a fianco per sbloccarli; le note restano sempre libere
+
+### Risolto
+- Aperendo la schermata Account non compare piu' un cursore lampeggiante sul campo mese di nascita (la precompilazione automatica dei tre campi data spostava il focus li' per errore)
+- Le previsioni dei giorni futuri: l'icona/descrizione principale del giorno ora riflette davvero le condizioni mostrate negli orari sottostanti (prima poteva mostrare "nebbia" anche in giornate dove nessun orario indicava nebbia, perche' si basava sul codice "piu' significativo" di Open-Meteo invece che sulla condizione piu' frequente nelle ore diurne)
+
 ## v1.8.1 — 2026-09-11
 
 ### Aggiunto

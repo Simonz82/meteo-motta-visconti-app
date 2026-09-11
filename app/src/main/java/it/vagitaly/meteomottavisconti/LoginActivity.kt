@@ -164,10 +164,10 @@ class LoginActivity : AppCompatActivity() {
             if (isRegisterMode) {
                 ApiClient.register(
                     email, password,
-                    nomeInput.text.toString().trim(),
-                    cognomeInput.text.toString().trim(),
+                    NameFormatter.capitalizeWords(nomeInput.text.toString().trim()),
+                    NameFormatter.capitalizeWords(cognomeInput.text.toString().trim()),
                     dataNascita,
-                    cittaInput.text.toString().trim(),
+                    NameFormatter.capitalizeWords(cittaInput.text.toString().trim()),
                     onResult
                 )
             } else {

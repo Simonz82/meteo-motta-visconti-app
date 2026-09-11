@@ -26,11 +26,60 @@ class AccountActivity : AppCompatActivity() {
         val monthInput = findViewById<EditText>(R.id.monthInput)
         val yearInput = findViewById<EditText>(R.id.yearInput)
         DateInputHelper.setup(dayInput, monthInput, yearInput)
+        val ageText = findViewById<TextView>(R.id.ageText)
         val noteInput = findViewById<EditText>(R.id.noteInput)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         val contentGroup = findViewById<android.widget.LinearLayout>(R.id.contentGroup)
         val btnSave = findViewById<Button>(R.id.btnSave)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
+
+        val editNomeLink = findViewById<TextView>(R.id.editNomeLink)
+        val editCognomeLink = findViewById<TextView>(R.id.editCognomeLink)
+        val editDataLink = findViewById<TextView>(R.id.editDataLink)
+        val editCittaLink = findViewById<TextView>(R.id.editCittaLink)
+
+        // Campi bloccati di default (mostrano il valore ma non si modificano per
+        // sbaglio); un tocco sul link "Modifica" a fianco li sblocca. Le note
+        // restano sempre libere, non hanno bisogno di questa protezione.
+        fun lockField(vararg fields: EditText) {
+            fields.forEach {
+                it.isFocusable = false
+                it.isFocusableInTouchMode = false
+                it.isCursorVisible = false
+                it.alpha = 0.65f
+            }
+        }
+        fun unlockField(vararg fields: EditText) {
+            fields.forEach {
+                it.isFocusable = true
+                it.isFocusableInTouchMode = true
+                it.isCursorVisible = true
+                it.alpha = 1f
+            }
+            fields.first().requestFocus()
+        }
+
+        editNomeLink.setOnClickListener {
+            unlockField(nomeInput)
+            editNomeLink.visibility = android.view.View.GONE
+        }
+        editCognomeLink.setOnClickListener {
+            unlockField(cognomeInput)
+            editCognomeLink.visibility = android.view.View.GONE
+        }
+        editDataLink.setOnClickListener {
+            unlockField(dayInput, monthInput, yearInput)
+            editDataLink.visibility = android.view.View.GONE
+        }
+        editCittaLink.setOnClickListener {
+            unlockField(cittaInput)
+            editCittaLink.visibility = android.view.View.GONE
+        }
+
+        fun aggiornaEta(iso: String) {
+            val eta = DateInputHelper.calculateAge(iso)
+            ageText.text = if (eta != null) getString(R.string.account_age_format, eta) else ""
+        }
 
         val token = AccountManager.getToken(this)
         if (token == null) {
@@ -47,15 +96,24 @@ class AccountActivity : AppCompatActivity() {
             progressBar.visibility = android.view.View.GONE
             if (result.success) {
                 emailText.text = result.json.optString("email")
-                nomeInput.setText(result.json.optString("nome", ""))
-                cognomeInput.setText(result.json.optString("cognome", ""))
-                cittaInput.setText(result.json.optString("citta", ""))
+                nomeInput.setText(NameFormatter.capitalizeWords(result.json.optString("nome", "")))
+                cognomeInput.setText(NameFormatter.capitalizeWords(result.json.optString("cognome", "")))
+                cittaInput.setText(NameFormatter.capitalizeWords(result.json.optString("citta", "")))
                 val data = result.json.optString("data_nascita", "")
                 if (data.isNotEmpty()) {
                     DateInputHelper.populate(data, dayInput, monthInput, yearInput)
+                    aggiornaEta(data)
                 }
                 noteInput.setText(result.json.optString("note", ""))
                 contentGroup.visibility = android.view.View.VISIBLE
+
+                // I campi precompilati partono bloccati (vedi lockField sopra).
+                lockField(nomeInput, cognomeInput, cittaInput, dayInput, monthInput, yearInput)
+                // Precompilare i campi data sposta il focus da un campo all'altro
+                // (avanzamento automatico pensato per la digitazione manuale):
+                // qui riportiamo il focus sul contenitore cosi' non resta un
+                // cursore lampeggiante visibile appena si apre la schermata.
+                contentGroup.requestFocus()
             } else if (result.statusCode == 401) {
                 sessionExpired()
             } else {
@@ -65,9 +123,9 @@ class AccountActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            val nome = nomeInput.text.toString().trim()
-            val cognome = cognomeInput.text.toString().trim()
-            val citta = cittaInput.text.toString().trim()
+            val nome = NameFormatter.capitalizeWords(nomeInput.text.toString().trim())
+            val cognome = NameFormatter.capitalizeWords(cognomeInput.text.toString().trim())
+            val citta = NameFormatter.capitalizeWords(cittaInput.text.toString().trim())
             val note = noteInput.text.toString().trim()
             val dataNascita = if (DateInputHelper.isEmpty(dayInput, monthInput, yearInput)) {
                 null
@@ -84,6 +142,10 @@ class AccountActivity : AppCompatActivity() {
             ApiClient.updateAccount(token, nome, cognome, dataNascita, citta, note) { result ->
                 btnSave.isEnabled = true
                 if (result.success) {
+                    nomeInput.setText(nome)
+                    cognomeInput.setText(cognome)
+                    cittaInput.setText(citta)
+                    if (dataNascita != null) aggiornaEta(dataNascita)
                     Toast.makeText(this, getString(R.string.account_save_success), Toast.LENGTH_SHORT).show()
                 } else if (result.statusCode == 401) {
                     sessionExpired()

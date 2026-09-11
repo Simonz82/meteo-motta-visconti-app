@@ -52,36 +52,103 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:visibility="gone">
 
-        <EditText
-            android:id="@+id/nomeInput"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_nome_hint"
-            android:inputType="textPersonName"
-            android:textColor="#ffffff"
-            android:textColorHint="#777777"
-            android:backgroundTint="#00d4ff" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <EditText
-            android:id="@+id/cognomeInput"
+            <EditText
+                android:id="@+id/nomeInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/account_nome_hint"
+                android:inputType="textPersonName"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+            <TextView
+                android:id="@+id/editNomeLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="6dp"
+                android:text="@string/account_edit_field"
+                android:textColor="#9e9e9e"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/account_cognome_hint"
-            android:inputType="textPersonName"
-            android:textColor="#ffffff"
-            android:textColorHint="#777777"
-            android:backgroundTint="#00d4ff" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/cognomeInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/account_cognome_hint"
+                android:inputType="textPersonName"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+            <TextView
+                android:id="@+id/editCognomeLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="6dp"
+                android:text="@string/account_edit_field"
+                android:textColor="#9e9e9e"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/account_data_nascita_hint"
-            android:textColor="#9e9e9e"
-            android:textSize="12sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/account_data_nascita_hint"
+                android:textColor="#9e9e9e"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/ageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#00d4ff"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/editDataLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="6dp"
+                android:text="@string/account_edit_field"
+                android:textColor="#9e9e9e"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,16 +216,35 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/cittaInput"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/account_citta_hint"
-            android:inputType="textCapWords"
-            android:textColor="#ffffff"
-            android:textColorHint="#777777"
-            android:backgroundTint="#00d4ff" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:id="@+id/cittaInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/account_citta_hint"
+                android:inputType="textCapWords"
+                android:textColor="#ffffff"
+                android:textColorHint="#777777"
+                android:backgroundTint="#00d4ff" />
+
+            <TextView
+                android:id="@+id/editCittaLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="6dp"
+                android:text="@string/account_edit_field"
+                android:textColor="#9e9e9e"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/noteInput"

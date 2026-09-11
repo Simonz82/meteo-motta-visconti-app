@@ -50,4 +50,19 @@ object DateInputHelper {
         month.setText(parts[1])
         day.setText(parts[2])
     }
+
+    // Eta' in anni compiuti da una data ISO "YYYY-MM-DD", o null se non valida.
+    fun calculateAge(iso: String): Int? {
+        val parts = iso.split("-")
+        if (parts.size != 3) return null
+        val y = parts[0].toIntOrNull() ?: return null
+        val m = parts[1].toIntOrNull() ?: return null
+        val d = parts[2].toIntOrNull() ?: return null
+        val oggi = Calendar.getInstance()
+        var eta = oggi.get(Calendar.YEAR) - y
+        val meseOggi = oggi.get(Calendar.MONTH) + 1
+        val giornoOggi = oggi.get(Calendar.DAY_OF_MONTH)
+        if (meseOggi < m || (meseOggi == m && giornoOggi < d)) eta--
+        return if (eta in 0..150) eta else null
+    }
 }
