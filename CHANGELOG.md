@@ -2,6 +2,12 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.8.1 — 2026-09-11
+
+### Aggiunto
+- Pallino rosso di notifica quando c'è un aggiornamento disponibile: sull'icona del menu ad hamburger e sulla voce "Info app" del menu laterale
+- Nella schermata Info, sezione "🚀 AGGIORNA APP" ben evidenziata (riquadro con bordo) quando c'è una nuova versione, con scritto quale versione è disponibile
+
 ## v1.8.0 — 2026-09-11
 
 ### Aggiunto

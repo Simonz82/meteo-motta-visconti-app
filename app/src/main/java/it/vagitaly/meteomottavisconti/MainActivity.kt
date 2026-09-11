@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private lateinit var menuBadge: TextView
 
     private val siteHost = "meteo.nas.vagitaly.it"
 
@@ -33,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         swipeRefresh = findViewById(R.id.swipeRefresh)
         drawerLayout = findViewById(R.id.drawerLayout)
-        val navigationView: NavigationView = findViewById(R.id.navigationView)
+        navigationView = findViewById(R.id.navigationView)
+        menuBadge = findViewById(R.id.menuBadge)
         val btnMenu = findViewById<android.widget.ImageButton>(R.id.btnMenu)
 
         setupWebView()
@@ -152,6 +156,14 @@ class MainActivity : AppCompatActivity() {
             val file = result.json.optString("file", "")
             if (remoteVersionCode <= BuildConfig.VERSION_CODE || file.isEmpty()) return@getLatestVersion
 
+            // Pallino rosso sull'hamburger e sulla voce "Info app" del menu:
+            // segnala l'aggiornamento disponibile anche senza aprire il dialogo.
+            // (Il drawer NavigationView non ha un vero sistema di badge come le
+            // barre di navigazione: il pallino viene disegnato sopra l'icona.)
+            menuBadge.visibility = TextView.VISIBLE
+            val aboutItem = navigationView.menu.findItem(R.id.nav_about)
+            aboutItem.icon = badgeDrawable(android.R.drawable.ic_menu_info_details)
+
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.update_available_title))
                 .setMessage(getString(R.string.update_available_message, remoteVersionName))
@@ -166,6 +178,33 @@ class MainActivity : AppCompatActivity() {
                 .setNegativeButton(getString(R.string.update_later), null)
                 .show()
         }
+    }
+
+    // Disegna un pallino rosso con "1" sopra l'icona passata: il drawer
+    // NavigationView non ha un sistema di badge nativo come le barre di
+    // navigazione (quello esiste solo per BottomNavigationView/NavigationRailView).
+    private fun badgeDrawable(baseIconRes: Int): android.graphics.drawable.Drawable {
+        val baseDrawable = androidx.core.content.ContextCompat.getDrawable(this, baseIconRes)!!.mutate()
+        baseDrawable.setTint(android.graphics.Color.parseColor("#00d4ff"))
+        val size = (24 * resources.displayMetrics.density).toInt()
+        val bitmap = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
+        val canvas = android.graphics.Canvas(bitmap)
+        baseDrawable.setBounds(0, 0, size, size)
+        baseDrawable.draw(canvas)
+
+        val radius = size * 0.16f
+        val cx = size - radius - 1f
+        val cy = radius + 1f
+        val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        paint.color = android.graphics.Color.parseColor("#ff3b30")
+        canvas.drawCircle(cx, cy, radius, paint)
+        paint.color = android.graphics.Color.WHITE
+        paint.textSize = radius * 1.3f
+        paint.textAlign = android.graphics.Paint.Align.CENTER
+        val textY = cy - (paint.descent() + paint.ascent()) / 2
+        canvas.drawText("1", cx, textY, paint)
+
+        return android.graphics.drawable.BitmapDrawable(resources, bitmap)
     }
 
     private fun updateAccountMenuItem(navigationView: NavigationView) {

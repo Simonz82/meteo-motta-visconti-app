@@ -18,6 +18,8 @@ class AboutActivity : AppCompatActivity() {
 
         val versionText: TextView = findViewById(R.id.versionText)
         val updateStatusText: TextView = findViewById(R.id.updateStatusText)
+        val updateCard: android.widget.LinearLayout = findViewById(R.id.updateCard)
+        val updateVersionText: TextView = findViewById(R.id.updateVersionText)
         val btnUpdateNow: Button = findViewById(R.id.btnUpdateNow)
         var installedVersionName = ""
         try {
@@ -50,7 +52,7 @@ class AboutActivity : AppCompatActivity() {
             sendCategorizedEmail(getString(R.string.propose_email_subject), "")
         }
 
-        checkForUpdate(updateStatusText, btnUpdateNow, installedVersionName)
+        checkForUpdate(updateStatusText, updateCard, updateVersionText, btnUpdateNow, installedVersionName)
     }
 
     private fun sendCategorizedEmail(subject: String, body: String) {
@@ -67,7 +69,13 @@ class AboutActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkForUpdate(updateStatusText: TextView, btnUpdateNow: Button, installedVersionName: String) {
+    private fun checkForUpdate(
+        updateStatusText: TextView,
+        updateCard: android.widget.LinearLayout,
+        updateVersionText: TextView,
+        btnUpdateNow: Button,
+        installedVersionName: String
+    ) {
         ApiClient.getLatestVersion { result ->
             if (!result.success) return@getLatestVersion
             val remoteVersionCode = result.json.optInt("version_code", -1)
@@ -80,13 +88,12 @@ class AboutActivity : AppCompatActivity() {
                 return@getLatestVersion
             }
 
-            updateStatusText.text = getString(
+            updateVersionText.text = getString(
                 R.string.about_update_available,
                 remoteVersionName,
                 installedVersionName
             )
-            updateStatusText.visibility = TextView.VISIBLE
-            btnUpdateNow.visibility = Button.VISIBLE
+            updateCard.visibility = android.widget.LinearLayout.VISIBLE
             btnUpdateNow.setOnClickListener {
                 val url = getString(R.string.site_url) + file
                 try {

@@ -83,6 +83,7 @@
     <string name="about_changelog_link">Vedi il changelog completo</string>
     <string name="about_up_to_date">Hai già l\'ultima versione disponibile</string>
     <string name="about_update_available">Nuova versione disponibile: %1$s (la tua è %2$s)</string>
+    <string name="about_update_heading">🚀 AGGIORNA APP</string>
 
     <string name="theme_picker_title">Scegli il tema</string>
     <string name="dialog_cancel">Annulla</string>
