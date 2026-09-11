@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         checkForUpdate()
         requestNotificationPermissionIfNeeded()
         FcmHelper.registerCurrentToken(this)
-        DeviceInfoHelper.sendIfLoggedIn(this)
+        // (l'invio dati dispositivo parte da onResume, che segue sempre onCreate)
         maybeShowRegisterPrompt()
     }
 
@@ -115,6 +115,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         sessionStartMillis = System.currentTimeMillis()
+        // Rete di sicurezza: se l'invio dopo login/registrazione non e' arrivato
+        // (versione app precedente al fix, o l'app e' stata chiusa troppo in
+        // fretta prima che la richiesta di rete finisse), si corregge da solo
+        // al prossimo utilizzo dell'app.
+        DeviceInfoHelper.sendIfLoggedIn(this)
     }
 
     override fun onPause() {

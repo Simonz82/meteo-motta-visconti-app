@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.7.3 — 2026-09-11
+
+### Risolto
+- Rete di sicurezza per i dati dispositivo: se l'invio non arriva a buon fine (versione precedente al fix di prima, o l'app viene chiusa troppo in fretta dopo la registrazione), ora riparte automaticamente ad ogni ripresa dell'app, senza bisogno di reinstallare o fare altro
+
 ## v1.7.2 — 2026-09-11
 
 ### Risolto
