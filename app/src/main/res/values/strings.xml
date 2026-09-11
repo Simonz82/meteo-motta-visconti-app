@@ -86,4 +86,9 @@
 
     <string name="theme_picker_title">Scegli il tema</string>
     <string name="dialog_cancel">Annulla</string>
+
+    <string name="register_prompt_title">Sblocca tutte le funzioni dell\'app</string>
+    <string name="register_prompt_message">Registrati gratis per attivare le notifiche personalizzate (allerte, fulmini, pioggia, record storici), scegliere il tuo tema preferito e sbloccare le prossime novità. Puoi comunque continuare a usare l\'app senza registrarti.</string>
+    <string name="register_prompt_positive">Registrati ora</string>
+    <string name="register_prompt_negative">Più tardi</string>
 </resources>

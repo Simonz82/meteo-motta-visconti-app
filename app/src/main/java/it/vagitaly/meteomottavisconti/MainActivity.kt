@@ -85,6 +85,29 @@ class MainActivity : AppCompatActivity() {
         requestNotificationPermissionIfNeeded()
         FcmHelper.registerCurrentToken(this)
         DeviceInfoHelper.sendIfLoggedIn(this)
+        maybeShowRegisterPrompt()
+    }
+
+    // Invito alla registrazione mostrato una sola volta, al primissimo avvio,
+    // solo se l'utente non e' gia' loggato. Saltabile, non si ripete piu' dopo.
+    private fun maybeShowRegisterPrompt() {
+        if (AccountManager.isLoggedIn(this)) return
+        if (AccountManager.hasSeenRegisterPrompt(this)) return
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.register_prompt_title))
+            .setMessage(getString(R.string.register_prompt_message))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.register_prompt_positive)) { _, _ ->
+                AccountManager.markRegisterPromptSeen(this)
+                val intent = android.content.Intent(this, LoginActivity::class.java)
+                intent.putExtra(LoginActivity.EXTRA_START_IN_REGISTER_MODE, true)
+                startActivity(intent)
+            }
+            .setNegativeButton(getString(R.string.register_prompt_negative)) { _, _ ->
+                AccountManager.markRegisterPromptSeen(this)
+            }
+            .show()
     }
 
     private var sessionStartMillis: Long = 0L

@@ -36,4 +36,14 @@ object AccountManager {
     fun logout(context: Context) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().clear().apply()
     }
+
+    // Mostrato una sola volta, al primissimo avvio dell'app: invito a registrarsi
+    // per sfruttare notifiche/temi. Non va ripetuto per non essere invadenti.
+    fun hasSeenRegisterPrompt(context: Context): Boolean =
+        context.getSharedPreferences(REMEMBER_PREFS, Context.MODE_PRIVATE).getBoolean("seen_register_prompt", false)
+
+    fun markRegisterPromptSeen(context: Context) {
+        context.getSharedPreferences(REMEMBER_PREFS, Context.MODE_PRIVATE).edit()
+            .putBoolean("seen_register_prompt", true).apply()
+    }
 }

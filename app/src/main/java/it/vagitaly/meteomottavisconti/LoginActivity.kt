@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_START_IN_REGISTER_MODE = "start_in_register_mode"
+    }
+
     private var isRegisterMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +73,7 @@ class LoginActivity : AppCompatActivity() {
             showForgotPasswordDialog(emailInput.text.toString().trim())
         }
 
-        toggleModeText.setOnClickListener {
-            isRegisterMode = !isRegisterMode
+        fun applyMode() {
             errorText.visibility = TextView.GONE
             val visibility = if (isRegisterMode) EditText.VISIBLE else EditText.GONE
             nomeInput.visibility = visibility
@@ -87,6 +90,18 @@ class LoginActivity : AppCompatActivity() {
                 btnPrimary.text = getString(R.string.login_button)
                 toggleModeText.text = getString(R.string.switch_to_register)
             }
+        }
+
+        // Chi arriva dall'invito alla registrazione al primo avvio (MainActivity)
+        // vede subito il modulo di registrazione, senza dover toccare "Registrati".
+        if (intent.getBooleanExtra(EXTRA_START_IN_REGISTER_MODE, false)) {
+            isRegisterMode = true
+            applyMode()
+        }
+
+        toggleModeText.setOnClickListener {
+            isRegisterMode = !isRegisterMode
+            applyMode()
         }
 
         btnPrimary.setOnClickListener {

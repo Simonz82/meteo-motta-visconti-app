@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.7.0 — 2026-09-11
+
+### Aggiunto
+- Invito alla registrazione al primissimo avvio dell'app (solo se non già loggati): spiega i vantaggi di registrarsi (notifiche personalizzate, temi) con pulsante diretto alla schermata di registrazione già pronta, oppure "Più tardi" per continuare senza. Mostrato una sola volta
+
 ## v1.6.1 — 2026-09-11
 
 ### Aggiunto
