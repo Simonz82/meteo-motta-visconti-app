@@ -118,4 +118,11 @@ object ApiClient {
             request("/add_session_time.php", "POST", body, token)
         }, callback)
     }
+
+    fun changeEmail(token: String, newEmail: String, currentPassword: String, callback: (ApiResult) -> Unit) {
+        runAsync({
+            val body = JSONObject().put("new_email", newEmail).put("current_password", currentPassword)
+            request("/change_email.php", "POST", body, token)
+        }, callback)
+    }
 }

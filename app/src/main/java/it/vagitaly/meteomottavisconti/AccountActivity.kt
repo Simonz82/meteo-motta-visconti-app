@@ -39,6 +39,10 @@ class AccountActivity : AppCompatActivity() {
             return
         }
 
+        findViewById<TextView>(R.id.changeEmailLink).setOnClickListener {
+            showChangeEmailDialog(token, emailText)
+        }
+
         ApiClient.getAccount(token) { result ->
             progressBar.visibility = android.view.View.GONE
             if (result.success) {
@@ -105,6 +109,59 @@ class AccountActivity : AppCompatActivity() {
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
         }
+    }
+
+    private fun showChangeEmailDialog(token: String, emailText: TextView) {
+        val container = android.widget.LinearLayout(this)
+        container.orientation = android.widget.LinearLayout.VERTICAL
+        val padding = (16 * resources.displayMetrics.density).toInt()
+        container.setPadding(padding, padding, padding, 0)
+
+        val newEmailInput = EditText(this)
+        newEmailInput.hint = getString(R.string.change_email_new_hint)
+        newEmailInput.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        container.addView(newEmailInput)
+
+        val passwordInput = EditText(this)
+        passwordInput.hint = getString(R.string.change_email_password_hint)
+        passwordInput.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        container.addView(passwordInput)
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.change_email_dialog_title)
+            .setView(container)
+            .setPositiveButton(R.string.change_email_confirm) { _, _ ->
+                val newEmail = newEmailInput.text.toString().trim()
+                val password = passwordInput.text.toString()
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+                    Toast.makeText(this, getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+                if (password.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.error_missing_password), Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+                ApiClient.changeEmail(token, newEmail, password) { result ->
+                    if (result.success) {
+                        val updatedEmail = result.json.optString("email", newEmail)
+                        emailText.text = updatedEmail
+                        AccountManager.rememberEmail(this, updatedEmail)
+                        Toast.makeText(this, getString(R.string.change_email_success), Toast.LENGTH_SHORT).show()
+                    } else {
+                        val message = when (result.json.optString("error")) {
+                            "wrong_password" -> getString(R.string.error_wrong_password)
+                            "same_email" -> getString(R.string.error_same_email)
+                            "email_already_used" -> getString(R.string.error_email_already_used)
+                            "too_many_attempts" -> getString(R.string.error_too_many_attempts)
+                            "invalid_email" -> getString(R.string.error_invalid_email)
+                            else -> getString(R.string.error_network)
+                        }
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun sessionExpired() {

@@ -100,4 +100,16 @@
     <string name="support_email_body">Descrivi qui il problema riscontrato:\n\n\n\n---\nInfo tecniche (non modificare, utili per il supporto):\nVersione app: %1$s\nDispositivo: %2$s %3$s\nAndroid: %4$s</string>
     <string name="email_chooser_title">Invia email con</string>
     <string name="email_no_app_error">Nessuna app email trovata sul dispositivo</string>
+
+    <string name="change_email_link">Cambia email</string>
+    <string name="change_email_dialog_title">Cambia indirizzo email</string>
+    <string name="change_email_new_hint">Nuova email</string>
+    <string name="change_email_password_hint">Password attuale (per conferma)</string>
+    <string name="change_email_confirm">Cambia</string>
+    <string name="change_email_success">Email aggiornata</string>
+    <string name="error_missing_password">Inserisci la password attuale</string>
+    <string name="error_wrong_password">Password errata</string>
+    <string name="error_same_email">È già la tua email attuale</string>
+    <string name="error_email_already_used">Questa email è già usata da un altro account</string>
+    <string name="error_too_many_attempts">Troppi tentativi, riprova tra qualche minuto</string>
 </resources>

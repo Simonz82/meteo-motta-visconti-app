@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.8.0 — 2026-09-11
+
+### Aggiunto
+- Cambio email dalla schermata Account: link "Cambia email" che chiede il nuovo indirizzo e la password attuale per conferma (evita che un accesso rubato basti da solo a cambiare l'email di accesso). Controlla formato email valido, email già in uso da un altro account, e limita i tentativi in caso di password sbagliate ripetute
+
 ## v1.7.3 — 2026-09-11
 
 ### Risolto
