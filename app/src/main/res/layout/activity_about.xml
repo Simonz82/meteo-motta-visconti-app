@@ -81,4 +81,24 @@
         android:textColor="#00d4ff"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/supportLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/about_support_link"
+        android:textColor="#00d4ff"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/proposeLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/about_propose_link"
+        android:textColor="#00d4ff"
+        android:textSize="14sp" />
+
 </LinearLayout>

@@ -33,7 +33,38 @@ class AboutActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
 
+        // Oggetto con prefisso diverso per categoria: permette di smistare/filtrare
+        // le email in arrivo (supporto vs proposte) senza altra infrastruttura.
+        findViewById<TextView>(R.id.supportLink).setOnClickListener {
+            val body = getString(
+                R.string.support_email_body,
+                installedVersionName,
+                android.os.Build.MANUFACTURER,
+                android.os.Build.MODEL,
+                android.os.Build.VERSION.RELEASE
+            )
+            sendCategorizedEmail(getString(R.string.support_email_subject), body)
+        }
+
+        findViewById<TextView>(R.id.proposeLink).setOnClickListener {
+            sendCategorizedEmail(getString(R.string.propose_email_subject), "")
+        }
+
         checkForUpdate(updateStatusText, btnUpdateNow, installedVersionName)
+    }
+
+    private fun sendCategorizedEmail(subject: String, body: String) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email_address)))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            if (body.isNotEmpty()) putExtra(Intent.EXTRA_TEXT, body)
+        }
+        try {
+            startActivity(Intent.createChooser(intent, getString(R.string.email_chooser_title)))
+        } catch (e: Exception) {
+            Toast.makeText(this, getString(R.string.email_no_app_error), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun checkForUpdate(updateStatusText: TextView, btnUpdateNow: Button, installedVersionName: String) {

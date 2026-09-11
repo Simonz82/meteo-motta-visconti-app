@@ -91,4 +91,13 @@
     <string name="register_prompt_message">Registrati gratis per attivare le notifiche personalizzate (allerte, fulmini, pioggia, record storici), scegliere il tuo tema preferito e sbloccare le prossime novità. Puoi comunque continuare a usare l\'app senza registrarti.</string>
     <string name="register_prompt_positive">Registrati ora</string>
     <string name="register_prompt_negative">Più tardi</string>
+
+    <string name="about_support_link">Richiedi supporto</string>
+    <string name="about_propose_link">Proponi una novità (dati, viste, funzioni)</string>
+    <string name="support_email_address">meteo.motta@gmail.com</string>
+    <string name="support_email_subject">[Supporto App Meteo] </string>
+    <string name="propose_email_subject">[Proposta App Meteo] </string>
+    <string name="support_email_body">Descrivi qui il problema riscontrato:\n\n\n\n---\nInfo tecniche (non modificare, utili per il supporto):\nVersione app: %1$s\nDispositivo: %2$s %3$s\nAndroid: %4$s</string>
+    <string name="email_chooser_title">Invia email con</string>
+    <string name="email_no_app_error">Nessuna app email trovata sul dispositivo</string>
 </resources>

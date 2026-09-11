@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.7.1 — 2026-09-11
+
+### Aggiunto
+- Nella schermata Info: "Richiedi supporto" (apre l'email precompilata con versione app, marca/modello dispositivo e versione Android per facilitare la diagnosi) e "Proponi una novità" (dati, viste, funzioni) — oggetti diversi per categoria, cosi le email in arrivo si possono smistare facilmente
+
 ## v1.7.0 — 2026-09-11
 
 ### Aggiunto
