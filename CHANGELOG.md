@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.7.2 — 2026-09-11
+
+### Risolto
+- I dati tecnici del dispositivo non venivano inviati subito dopo una registrazione o un login riusciti nella stessa sessione (partivano solo al riavvio completo dell'app): un utente che si registrava e restava nell'app vedeva il proprio profilo senza marca/modello/versione Android ecc. Ora l'invio parte subito dopo login/registrazione
+
 ## v1.7.1 — 2026-09-11
 
 ### Aggiunto

@@ -56,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
                         AccountManager.save(this, token, userId, bioEmail)
                         AccountManager.rememberEmail(this, bioEmail)
                         FcmHelper.registerCurrentToken(this)
+                        DeviceInfoHelper.sendIfLoggedIn(this)
                         Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
@@ -151,6 +152,7 @@ class LoginActivity : AppCompatActivity() {
                     AccountManager.save(this, token, userId, email)
                     AccountManager.rememberEmail(this, email)
                     FcmHelper.registerCurrentToken(this)
+                    DeviceInfoHelper.sendIfLoggedIn(this)
                     Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
                     maybeOfferBiometric(email, password)
                 } else {
