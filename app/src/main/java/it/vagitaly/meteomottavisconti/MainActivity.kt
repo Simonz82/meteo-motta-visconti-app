@@ -84,6 +84,26 @@ class MainActivity : AppCompatActivity() {
         checkForUpdate()
         requestNotificationPermissionIfNeeded()
         FcmHelper.registerCurrentToken(this)
+        DeviceInfoHelper.sendIfLoggedIn(this)
+    }
+
+    private var sessionStartMillis: Long = 0L
+
+    override fun onResume() {
+        super.onResume()
+        sessionStartMillis = System.currentTimeMillis()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (sessionStartMillis > 0) {
+            val seconds = ((System.currentTimeMillis() - sessionStartMillis) / 1000).toInt()
+            sessionStartMillis = 0L
+            val token = AccountManager.getToken(this)
+            if (token != null && seconds > 0) {
+                ApiClient.addSessionTime(token, seconds) { }
+            }
+        }
     }
 
     private fun requestNotificationPermissionIfNeeded() {
@@ -147,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                 val chosen = keys[which]
                 ThemeManager.setTheme(this, chosen)
                 applyThemeToWebView(chosen)
+                AccountManager.getToken(this)?.let { token -> ApiClient.setTheme(token, chosen) { } }
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.dialog_cancel), null)

@@ -100,4 +100,22 @@ object ApiClient {
             request("/register_device.php", "POST", body, token)
         }, callback)
     }
+
+    fun updateDeviceInfo(token: String, info: JSONObject, callback: (ApiResult) -> Unit) {
+        runAsync({ request("/device_info.php", "POST", info, token) }, callback)
+    }
+
+    fun setTheme(token: String, theme: String, callback: (ApiResult) -> Unit) {
+        runAsync({
+            val body = JSONObject().put("theme", theme)
+            request("/set_theme.php", "POST", body, token)
+        }, callback)
+    }
+
+    fun addSessionTime(token: String, seconds: Int, callback: (ApiResult) -> Unit) {
+        runAsync({
+            val body = JSONObject().put("seconds", seconds)
+            request("/add_session_time.php", "POST", body, token)
+        }, callback)
+    }
 }

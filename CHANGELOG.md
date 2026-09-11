@@ -2,6 +2,13 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.6.1 — 2026-09-11
+
+### Aggiunto
+- Raccolta dati tecnici del dispositivo (marca, modello, versione Android, RAM, risoluzione schermo, tipo di connessione, operatore) inviati al backend per l'utente loggato, aggiornati ad ogni apertura dell'app
+- Tracciamento di data primo/ultimo accesso, numero di aperture e tempo totale di utilizzo, tema in uso — tutto legato all'account utente (non al singolo dispositivo, sopravvive a un cambio telefono)
+- Salvate anche versione app installata e data ultimo accesso: permetteranno di avvisare in futuro solo chi ha ancora una versione vecchia
+
 ## v1.6.0 — 2026-09-11
 
 ### Aggiunto
