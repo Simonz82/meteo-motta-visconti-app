@@ -147,6 +147,7 @@ class AccountActivity : AppCompatActivity() {
                     nomeInput.setText(nome)
                     cognomeInput.setText(cognome)
                     cittaInput.setText(citta)
+                    AccountManager.updateName(this, nome)
                     if (dataNascita != null) aggiornaEta(result.json, dataNascita) else ageText.text = ""
                     Toast.makeText(this, getString(R.string.account_save_success), Toast.LENGTH_SHORT).show()
                 } else if (result.statusCode == 401) {

@@ -3,6 +3,7 @@
     <string name="site_url">https://meteo.nas.vagitaly.it/</string>
     <string name="menu_button_description">Apri menu</string>
     <string name="menu_account_login">Accedi / Registrati</string>
+    <string name="menu_account_greeting">Ciao %1$s</string>
     <string name="back">Indietro</string>
 
     <string name="login_title">Accedi</string>

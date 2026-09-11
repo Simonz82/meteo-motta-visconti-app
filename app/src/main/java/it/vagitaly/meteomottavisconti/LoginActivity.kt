@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                     if (result.success) {
                         val token = result.json.optString("token")
                         val userId = result.json.optInt("user_id")
-                        AccountManager.save(this, token, userId, bioEmail)
+                        AccountManager.save(this, token, userId, bioEmail, result.json.optString("nome", ""))
                         AccountManager.rememberEmail(this, bioEmail)
                         FcmHelper.registerCurrentToken(this)
                         DeviceInfoHelper.sendIfLoggedIn(this)
@@ -149,7 +149,7 @@ class LoginActivity : AppCompatActivity() {
                 if (result.success) {
                     val token = result.json.optString("token")
                     val userId = result.json.optInt("user_id")
-                    AccountManager.save(this, token, userId, email)
+                    AccountManager.save(this, token, userId, email, result.json.optString("nome", ""))
                     AccountManager.rememberEmail(this, email)
                     FcmHelper.registerCurrentToken(this)
                     DeviceInfoHelper.sendIfLoggedIn(this)

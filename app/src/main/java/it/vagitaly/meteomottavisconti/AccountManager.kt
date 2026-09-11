@@ -17,11 +17,12 @@ object AccountManager {
     fun getRememberedEmail(context: Context): String? =
         context.getSharedPreferences(REMEMBER_PREFS, Context.MODE_PRIVATE).getString("email", null)
 
-    fun save(context: Context, token: String, userId: Int, email: String) {
+    fun save(context: Context, token: String, userId: Int, email: String, nome: String = "") {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
             .putString("token", token)
             .putInt("user_id", userId)
             .putString("email", email)
+            .putString("nome", nome)
             .apply()
     }
 
@@ -30,6 +31,16 @@ object AccountManager {
 
     fun getEmail(context: Context): String? =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("email", null)
+
+    fun getName(context: Context): String? =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("nome", null)
+
+    // Aggiorna solo il nome in cache, es. dopo una modifica salvata nella
+    // schermata Account, senza toccare token/email/sessione.
+    fun updateName(context: Context, nome: String) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putString("nome", nome).apply()
+    }
 
     fun isLoggedIn(context: Context): Boolean = getToken(context) != null
 

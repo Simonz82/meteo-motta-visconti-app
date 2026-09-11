@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.2 — 2026-09-11
+
+### Modificato
+- Nel menu laterale, da loggati, ora si vede "Ciao [nome]" invece della propria email (tocca sempre per entrare nell'account)
+
 ## v1.9.1 — 2026-09-11
 
 ### Modificato

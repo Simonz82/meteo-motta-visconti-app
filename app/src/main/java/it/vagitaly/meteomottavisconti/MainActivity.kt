@@ -210,7 +210,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateAccountMenuItem(navigationView: NavigationView) {
         val item = navigationView.menu.findItem(R.id.nav_account)
         item.title = if (AccountManager.isLoggedIn(this)) {
-            AccountManager.getEmail(this)
+            val nome = AccountManager.getName(this)
+            if (!nome.isNullOrBlank()) {
+                getString(R.string.menu_account_greeting, nome)
+            } else {
+                AccountManager.getEmail(this)
+            }
         } else {
             getString(R.string.menu_account_login)
         }
