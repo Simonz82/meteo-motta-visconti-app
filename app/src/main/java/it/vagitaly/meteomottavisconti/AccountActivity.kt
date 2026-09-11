@@ -76,9 +76,11 @@ class AccountActivity : AppCompatActivity() {
             editCittaLink.visibility = android.view.View.GONE
         }
 
-        fun aggiornaEta(iso: String) {
-            val eta = DateInputHelper.calculateAge(iso)
-            ageText.text = if (eta != null) getString(R.string.account_age_format, eta) else ""
+        // L'eta' e' calcolata dal server (fonte unica di verita', vedi calcola_eta
+        // in db.php); il calcolo locale resta solo come fallback difensivo.
+        fun aggiornaEta(json: org.json.JSONObject, iso: String) {
+            val eta = if (json.has("eta") && !json.isNull("eta")) json.optInt("eta") else DateInputHelper.calculateAge(iso)
+            ageText.text = if (eta != null && eta >= 0) getString(R.string.account_age_format, eta) else ""
         }
 
         val token = AccountManager.getToken(this)
@@ -102,7 +104,7 @@ class AccountActivity : AppCompatActivity() {
                 val data = result.json.optString("data_nascita", "")
                 if (data.isNotEmpty()) {
                     DateInputHelper.populate(data, dayInput, monthInput, yearInput)
-                    aggiornaEta(data)
+                    aggiornaEta(result.json, data)
                 }
                 noteInput.setText(result.json.optString("note", ""))
                 contentGroup.visibility = android.view.View.VISIBLE
@@ -145,7 +147,7 @@ class AccountActivity : AppCompatActivity() {
                     nomeInput.setText(nome)
                     cognomeInput.setText(cognome)
                     cittaInput.setText(citta)
-                    if (dataNascita != null) aggiornaEta(dataNascita)
+                    if (dataNascita != null) aggiornaEta(result.json, dataNascita) else ageText.text = ""
                     Toast.makeText(this, getString(R.string.account_save_success), Toast.LENGTH_SHORT).show()
                 } else if (result.statusCode == 401) {
                     sessionExpired()

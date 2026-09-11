@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.1 — 2026-09-11
+
+### Modificato
+- L'eta' mostrata nella schermata Account ora arriva calcolata dal server (dalla data di nascita salvata nel database), non solo dall'app: stessa fonte per eventuali usi futuri lato backend
+
 ## v1.9.0 — 2026-09-11
 
 ### Aggiunto
