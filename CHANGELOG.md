@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.3 — 2026-09-12
+
+### Aggiunto
+- La WebView invia ora un identificativo nello user-agent per farsi riconoscere dal sito come "app" e non come browser normale: usato per nascondere il banner "scarica l'app" e il pulsante lampeggiante quando si e' gia' dentro l'app
+
 ## v1.9.2 — 2026-09-11
 
 ### Modificato

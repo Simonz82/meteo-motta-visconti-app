@@ -260,6 +260,10 @@ class MainActivity : AppCompatActivity() {
         settings.loadWithOverviewMode = true
         settings.useWideViewPort = true
         settings.cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+        // Marcatore per far distinguere al sito "sono nell'app" da "sono nel
+        // browser": usato per nascondere il banner "scarica l'app" e il suo
+        // pulsante lampeggiante quando la pagina gira gia' dentro l'app.
+        settings.userAgentString = settings.userAgentString + " MeteoMottaAndroidApp/" + BuildConfig.VERSION_NAME
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: android.webkit.WebResourceRequest): Boolean {
