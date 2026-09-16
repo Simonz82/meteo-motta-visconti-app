@@ -1,4 +1,4 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,8 +14,17 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        // Se l'app e' stata aperta da un App Link (link toccato altrove, non
+        // digitato in Chrome), inoltra l'URL esatto a MainActivity invece di
+        // aprire sempre e solo la home.
+        val deepLinkUri = intent?.data
+
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            val mainIntent = Intent(this, MainActivity::class.java)
+            if (deepLinkUri != null) {
+                mainIntent.data = deepLinkUri
+            }
+            startActivity(mainIntent)
             finish()
         }, splashDelayMillis)
     }

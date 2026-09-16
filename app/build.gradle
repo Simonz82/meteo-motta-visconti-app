@@ -9,15 +9,15 @@ if (keystorePropsFile.exists()) {
 }
 
 android {
-    namespace "it.vagitaly.meteomottavisconti"
-    compileSdk 34
+    namespace "it.meteomottavisconti"
+    compileSdk 36
 
     defaultConfig {
-        applicationId "it.vagitaly.meteomottavisconti"
+        applicationId "it.meteomottavisconti"
         minSdk 24
-        targetSdk 34
-        versionCode 29
-        versionName "1.9.3"
+        targetSdk 36
+        versionCode 32
+        versionName "1.9.4"
     }
 
     signingConfigs {
@@ -33,7 +33,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
         }

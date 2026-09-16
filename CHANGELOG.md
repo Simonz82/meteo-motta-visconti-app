@@ -2,6 +2,18 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.4 — 2026-09-16 (build pronta, non ancora pubblicata su Play Store)
+
+### Modificato
+- Nome del pacchetto cambiato definitivamente in `it.meteomottavisconti` (era `it.vagitaly.meteomottavisconti`)
+- `compileSdk`/`targetSdk` portati a 36, con gestione esplicita degli inset delle barre di sistema (richiesta da Android 16 per l'edge-to-edge obbligatorio)
+- Abilitati R8/ProGuard per la build di release (dimensione APK ridotta, avvisi di ottimizzazione di Play Console risolti)
+
+### Aggiunto
+- Schermate di Login/Registrazione: la tastiera non copre più i campi da compilare
+- Primo ponte nativo pagina↔app (`window.AndroidBridge`), usato dal sito per sapere se l'utente è loggato nell'app (oggi usato solo dalla sezione Notizie, non ancora attiva)
+- Supporto Android App Links per aprire i link del sito direttamente nell'app
+
 ## v1.9.3 — 2026-09-12
 
 ### Aggiunto

@@ -1,4 +1,4 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

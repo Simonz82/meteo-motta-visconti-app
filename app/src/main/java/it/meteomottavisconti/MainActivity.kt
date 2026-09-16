@@ -1,10 +1,11 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
@@ -15,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
@@ -32,6 +35,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Da targetSdk 36 (Android 16) il contenuto viene disegnato sotto le barre di
+        // sistema per obbligo (non e' piu' possibile disattivarlo): rimettiamo noi il
+        // padding equivalente cosi' il pulsante menu e il contenuto della pagina restano
+        // sotto la barra di stato e sopra la barra di navigazione, come prima.
+        val contentFrame = findViewById<android.widget.FrameLayout>(R.id.contentFrame)
+        ViewCompat.setOnApplyWindowInsetsListener(contentFrame) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
 
         webView = findViewById(R.id.webView)
         swipeRefresh = findViewById(R.id.swipeRefresh)
@@ -80,9 +94,18 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (savedInstanceState == null) {
-            // Parametri di campagna riconosciuti nativamente da Matomo (nessuna configurazione
-            // lato Matomo necessaria): permettono di distinguere le visite dall'app in un Segmento.
-            webView.loadUrl(getString(R.string.site_url) + "?mtm_campaign=app_android&mtm_source=app")
+            // Se l'app e' stata aperta da un App Link (vedi SplashActivity), carica
+            // esattamente quella pagina invece della home, purche' sia davvero il
+            // nostro dominio (controllo di sicurezza contro un intent malformato).
+            val deepLinkUrl = intent?.dataString
+            val deepLinkHost = deepLinkUrl?.let { Uri.parse(it).host }
+            if (deepLinkUrl != null && deepLinkHost == siteHost) {
+                webView.loadUrl(deepLinkUrl)
+            } else {
+                // Parametri di campagna riconosciuti nativamente da Matomo (nessuna configurazione
+                // lato Matomo necessaria): permettono di distinguere le visite dall'app in un Segmento.
+                webView.loadUrl(getString(R.string.site_url) + "?mtm_campaign=app_android&mtm_source=app")
+            }
         }
 
         checkForUpdate()
@@ -297,6 +320,19 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Impossibile avviare il download", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Ponte pagina->app usato dalla sezione Notizie del sito per sapere se
+        // l'utente e' loggato (senza questo la pagina vedrebbe sempre "non loggato"
+        // dentro l'app, anche con AccountManager.isLoggedIn true).
+        webView.addJavascriptInterface(WebAppBridge(this), "AndroidBridge")
+    }
+
+    // @JavascriptInterface espone metodi alla pagina web caricata nella WebView
+    // (window.AndroidBridge.xxx() in JS). Nessun metodo qui deve mai toccare la
+    // UI direttamente: gira su un thread del WebView, non sul thread principale.
+    private class WebAppBridge(private val activity: MainActivity) {
+        @JavascriptInterface
+        fun isLoggedIn(): Boolean = AccountManager.isLoggedIn(activity)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

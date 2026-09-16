@@ -29,7 +29,7 @@ Le modifiche vengono registrate in [CHANGELOG.md](CHANGELOG.md).
 
 ## Struttura del repository
 
-- `app/src/main/java/it/vagitaly/meteomottavisconti/` — codice sorgente Kotlin (schermate, client API, autenticazione biometrica, integrazione Firebase)
+- `app/src/main/java/it/meteomottavisconti/` — codice sorgente Kotlin (schermate, client API, autenticazione biometrica, integrazione Firebase)
 - `app/src/main/res/` — layout, stringhe, icone
 - `app/src/main/AndroidManifest.xml` — permessi e componenti dichiarati
 

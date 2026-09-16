@@ -1,4 +1,4 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 import android.app.ActivityManager
 import android.content.Context

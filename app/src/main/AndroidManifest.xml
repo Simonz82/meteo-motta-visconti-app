@@ -22,6 +22,18 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Android App Links: un link a meteo.nas.vagitaly.it toccato da
+                 un'altra app (ricerca, WhatsApp, email, notifiche) apre questa
+                 app invece del browser. Richiede assetlinks.json pubblicato su
+                 quel dominio con l'impronta del certificato di firma. NON
+                 intercetta un indirizzo digitato a mano in Chrome: e' una
+                 scelta deliberata di Android/Chrome, non aggirabile. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="meteo.nas.vagitaly.it" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -29,8 +41,8 @@
             android:exported="false"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
-        <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".AccountActivity" android:exported="false" />
+        <activity android:name=".LoginActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".AccountActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".NotificationSettingsActivity" android:exported="false" />
 
         <service

@@ -1,4 +1,4 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 // Capitalizza la prima lettera di ogni parola (es. "motta visconti" ->
 // "Motta Visconti"), cosi' nome/cognome/citta' sono sempre coerenti anche

@@ -1,4 +1,4 @@
-package it.vagitaly.meteomottavisconti
+package it.meteomottavisconti
 
 import android.content.Context
 import com.google.firebase.messaging.FirebaseMessaging
