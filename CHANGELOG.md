@@ -2,6 +2,16 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.5 (versionCode 36) — 2026-09-17
+
+### Modificato
+- Controllo aggiornamenti (schermata principale e "Info App"): ora interroga direttamente il Play Store (Play Core Library) invece del vecchio file `latest_version.json` sul NAS, dato che l'APK a scaricamento diretto non è più previsto; se è disponibile una versione più recente, apre la scheda dell'app sul Play Store
+- Sistema di temi: aggiunti i nuovi temi "glass" (Black Glass, Black AMOLED, Blu, Green, Pink, Red, Violet, Orange, Teal, Gold, Notte), in linea con il nuovo restyling del sito
+
+### Aggiunto
+- Impostazioni notifiche: 4 nuovi interruttori per le notizie locali (Motta Visconti, Casorate Primo, Bereguardo, Besate), attivabili singolarmente
+- Ponte nativo `AndroidBridge.setPullToRefreshEnabled()`: evita che il pull-to-refresh dell'app ricarichi l'intera pagina quando l'utente sta scorrendo dentro un popup del sito (es. Storico Notizie)
+
 ## v1.9.4 — 2026-09-16 (build pronta, non ancora pubblicata su Play Store)
 
 ### Modificato

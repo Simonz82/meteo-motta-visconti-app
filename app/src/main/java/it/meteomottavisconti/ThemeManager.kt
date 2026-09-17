@@ -12,11 +12,17 @@ object ThemeManager {
     val THEMES = linkedMapOf(
         "scuro" to "Scuro (predefinito)",
         "chiaro" to "Chiaro",
-        "black" to "Black (AMOLED)",
+        "black" to "Black Glass",
+        "blackamoled" to "Black AMOLED",
         "blu" to "Blu",
         "green" to "Green",
         "pink" to "Pink",
-        "red" to "Red"
+        "red" to "Red",
+        "violet" to "Violet",
+        "orange" to "Orange",
+        "teal" to "Teal",
+        "gold" to "Gold",
+        "notte" to "Notte"
     )
 
     fun getTheme(context: Context): String =

@@ -36,6 +36,11 @@
     <string name="notif_inizia_a_piovere">Inizia a Piovere (rilevato da stazione)</string>
     <string name="notif_nuovo_record">Nuovo Record Storico</string>
     <string name="notif_app_update">Nuova versione app disponibile</string>
+    <string name="notif_news_section_title">Notizie locali</string>
+    <string name="notif_news_motta">Notizie - Motta Visconti</string>
+    <string name="notif_news_casorate">Notizie - Casorate Primo</string>
+    <string name="notif_news_bereguardo">Notizie - Bereguardo</string>
+    <string name="notif_news_besate">Notizie - Besate</string>
     <string name="notif_time_window_title">Fascia oraria notifiche</string>
     <string name="notif_time_window_subtitle">Fuori da questo orario non riceverai notifiche</string>
     <string name="notif_time_from">Da</string>
@@ -73,6 +78,8 @@
 
     <string name="update_available_title">Nuova versione disponibile</string>
     <string name="update_available_message">È disponibile la versione %1$s. Vuoi scaricarla ora?</string>
+    <string name="update_available_message_playstore">È disponibile un aggiornamento su Google Play. Vuoi installarlo ora?</string>
+    <string name="update_open_playstore">Apri Play Store</string>
     <string name="update_download_now">Scarica ora</string>
     <string name="update_later">Più tardi</string>
 
@@ -84,6 +91,7 @@
     <string name="about_changelog_link">Vedi il changelog completo</string>
     <string name="about_up_to_date">Hai già l\'ultima versione disponibile</string>
     <string name="about_update_available">Nuova versione disponibile: %1$s (la tua è %2$s)</string>
+    <string name="about_update_available_playstore">È disponibile un aggiornamento su Google Play.</string>
     <string name="about_update_heading">🚀 AGGIORNA APP</string>
 
     <string name="theme_picker_title">Scegli il tema</string>

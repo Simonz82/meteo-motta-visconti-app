@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 
 class AboutActivity : AppCompatActivity() {
 
@@ -52,7 +54,7 @@ class AboutActivity : AppCompatActivity() {
             sendCategorizedEmail(getString(R.string.propose_email_subject), "")
         }
 
-        checkForUpdate(updateStatusText, updateCard, updateVersionText, btnUpdateNow, installedVersionName)
+        checkForUpdate(updateStatusText, updateCard, updateVersionText, btnUpdateNow)
     }
 
     private fun sendCategorizedEmail(subject: String, body: String) {
@@ -69,39 +71,40 @@ class AboutActivity : AppCompatActivity() {
         }
     }
 
+    // Come MainActivity.checkForUpdate(): chiede direttamente a Google Play,
+    // non piu' al sito (latest_version.json non esiste piu' come fonte per
+    // l'app, l'APK libero non e' piu' distribuito). Play Core non espone il
+    // numero della versione disponibile, solo se ce n'e' una piu' nuova.
     private fun checkForUpdate(
         updateStatusText: TextView,
         updateCard: android.widget.LinearLayout,
         updateVersionText: TextView,
-        btnUpdateNow: Button,
-        installedVersionName: String
+        btnUpdateNow: Button
     ) {
-        ApiClient.getLatestVersion { result ->
-            if (!result.success) return@getLatestVersion
-            val remoteVersionCode = result.json.optInt("version_code", -1)
-            val remoteVersionName = result.json.optString("version_name", "")
-            val file = result.json.optString("file", "")
-
-            if (remoteVersionCode <= BuildConfig.VERSION_CODE || file.isEmpty()) {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() != UpdateAvailability.UPDATE_AVAILABLE) {
                 updateStatusText.text = getString(R.string.about_up_to_date)
                 updateStatusText.visibility = TextView.VISIBLE
-                return@getLatestVersion
+                return@addOnSuccessListener
             }
 
-            updateVersionText.text = getString(
-                R.string.about_update_available,
-                remoteVersionName,
-                installedVersionName
-            )
+            updateVersionText.text = getString(R.string.about_update_available_playstore)
             updateCard.visibility = android.widget.LinearLayout.VISIBLE
             btnUpdateNow.setOnClickListener {
-                val url = getString(R.string.site_url) + file
                 try {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Impossibile avviare il download", Toast.LENGTH_SHORT).show()
+                    try {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                    } catch (e2: Exception) {
+                        Toast.makeText(this, "Impossibile aprire Play Store", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        }.addOnFailureListener {
+            // Nessuna connessione a Play Services o app non installata da Play Store
+            // (es. durante lo sviluppo): non mostriamo nulla, ne' errore ne' "aggiornata".
         }
     }
 }

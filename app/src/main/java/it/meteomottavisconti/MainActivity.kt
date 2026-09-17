@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.webkit.JavascriptInterface
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
@@ -169,15 +171,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Confronta la versione installata con quella pubblicata sul sito (latest_version.json).
-    // Nessun push coinvolto: e' un controllo attivo fatto ad ogni apertura dell'app.
+    // Chiede direttamente a Google Play (non piu' al sito/NAS) se e' disponibile
+    // una versione piu' recente di quella installata. Funziona per qualunque
+    // installazione avvenuta tramite Play Store, incluso il canale di test
+    // chiuso - un'installazione diretta dell'APK (se mai riaccadesse) non ha
+    // nulla da confrontare e semplicemente non segnala mai nulla, per design
+    // dell'API stessa (non e' un bug da correggere qui).
     private fun checkForUpdate() {
-        ApiClient.getLatestVersion { result ->
-            if (!result.success) return@getLatestVersion
-            val remoteVersionCode = result.json.optInt("version_code", -1)
-            val remoteVersionName = result.json.optString("version_name", "")
-            val file = result.json.optString("file", "")
-            if (remoteVersionCode <= BuildConfig.VERSION_CODE || file.isEmpty()) return@getLatestVersion
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() != UpdateAvailability.UPDATE_AVAILABLE) return@addOnSuccessListener
 
             // Pallino rosso sull'hamburger e sulla voce "Info app" del menu:
             // segnala l'aggiornamento disponibile anche senza aprire il dialogo.
@@ -189,13 +192,16 @@ class MainActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.update_available_title))
-                .setMessage(getString(R.string.update_available_message, remoteVersionName))
-                .setPositiveButton(getString(R.string.update_download_now)) { _, _ ->
-                    val url = getString(R.string.site_url) + file
+                .setMessage(getString(R.string.update_available_message_playstore))
+                .setPositiveButton(getString(R.string.update_open_playstore)) { _, _ ->
                     try {
-                        startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url)))
+                        startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
                     } catch (e: Exception) {
-                        Toast.makeText(this, "Impossibile avviare il download", Toast.LENGTH_SHORT).show()
+                        try {
+                            startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                        } catch (e2: Exception) {
+                            Toast.makeText(this, "Impossibile aprire Play Store", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 .setNegativeButton(getString(R.string.update_later), null)
@@ -276,6 +282,12 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    // Usato dal ponte JS (vedi WebAppBridge) per disattivare il pull-to-refresh
+    // mentre un popup del sito e' aperto, e riattivarlo alla chiusura.
+    fun setSwipeRefreshEnabled(enabled: Boolean) {
+        swipeRefresh.isEnabled = enabled
+    }
+
     private fun setupWebView() {
         val settings = webView.settings
         settings.javaScriptEnabled = true
@@ -333,6 +345,17 @@ class MainActivity : AppCompatActivity() {
     private class WebAppBridge(private val activity: MainActivity) {
         @JavascriptInterface
         fun isLoggedIn(): Boolean = AccountManager.isLoggedIn(activity)
+
+        // Il pull-to-refresh nativo (SwipeRefreshLayout) guarda solo se la
+        // WebView nel suo complesso puo' scorrere verso l'alto: non sa nulla
+        // di un popup aperto sopra con un suo scroll interno, quindi un
+        // trascinamento verso il basso dentro il popup veniva scambiato per
+        // "sono in cima alla pagina, ricarica" invece di scorrere il popup.
+        // Il sito chiama questo metodo all'apertura/chiusura di ogni popup.
+        @JavascriptInterface
+        fun setPullToRefreshEnabled(enabled: Boolean) {
+            activity.runOnUiThread { activity.setSwipeRefreshEnabled(enabled) }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

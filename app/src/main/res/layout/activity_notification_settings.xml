@@ -109,6 +109,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            android:text="@string/notif_news_section_title"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/checkNewsMotta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_news_motta"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkNewsCasorate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_news_casorate"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkNewsBereguardo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_news_bereguardo"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <CheckBox
+            android:id="@+id/checkNewsBesate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/notif_news_besate"
+            android:textColor="#ffffff"
+            android:buttonTint="#00d4ff" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
             android:text="@string/notif_time_window_title"
             android:textColor="#ffffff"
             android:textSize="15sp"
