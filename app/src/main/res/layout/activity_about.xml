@@ -1,132 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Restyle 2026-09-29: stesso stile "glass" a card di Account/Notifiche
+     (restyle 2026-09-25). Stessi id di prima per le viste gia' usate da
+     AboutActivity (versionText, updateStatusText, updateCard, ...), piu'
+     aboutScroll (insets edge-to-edge), upToDateRow ed emailRow. -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/aboutScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/site_background"
+    android:clipToPadding="false"
+    android:background="@color/site_background">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
-
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:tint="#ffffff"
-        android:contentDescription="@string/back" />
-
-    <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
-        android:src="@mipmap/ic_launcher"
-        android:contentDescription="@string/app_name" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/versionText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center"
-        android:textColor="#9e9e9e"
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/updateStatusText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:textColor="#9e9e9e"
-        android:textSize="13sp"
-        android:visibility="gone" />
+    android:padding="20dp">
 
     <LinearLayout
-        android:id="@+id/updateCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@drawable/bg_update_card"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="18dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#ffffff"
+            android:contentDescription="@string/back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_update_heading"
-            android:textColor="#00d4ff"
-            android:textSize="15sp"
+            android:layout_marginStart="14dp"
+            android:text="@string/about_title"
+            android:textColor="#ffffff"
+            android:textSize="23sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/updateVersionText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:textColor="#e1e1e1"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btnUpdateNow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="#00d4ff"
-            android:text="@string/update_download_now" />
-
     </LinearLayout>
 
-    <TextView
+    <!-- Card: app, versione, stato aggiornamento -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
-        android:text="@string/about_developer"
-        android:textColor="#aaaaaa"
-        android:textSize="14sp" />
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/bg_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="22dp"
+            android:paddingBottom="18dp">
+
+            <ImageView
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:src="@mipmap/ic_launcher_round"
+                android:contentDescription="@string/app_name" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="#ffffff"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/versionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_pill_round_accent"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/accent"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Mostrata solo se Google Play conferma che non ci sono aggiornamenti -->
+            <LinearLayout
+                android:id="@+id/upToDateRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/bg_circle_ok"
+                    android:gravity="center"
+                    android:text="✓"
+                    android:textColor="#66bb6a"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/updateStatusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Mostrata solo se c'e' un aggiornamento su Google Play -->
+            <LinearLayout
+                android:id="@+id/updateCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_update_card"
+                android:padding="14dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_update_heading"
+                    android:textColor="@color/accent"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/updateVersionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnUpdateNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cornerRadius="15dp"
+                    android:backgroundTint="@color/accent"
+                    android:textColor="#00222a"
+                    android:textStyle="bold"
+                    android:text="@string/about_update_now" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card: Novita' -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/bg_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/about_section_news"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp"
+                android:textStyle="bold" />
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginBottom="2dp" android:background="@color/border_color" />
+
+            <LinearLayout
+                android:id="@+id/changelogLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="26dp" android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp" android:text="📝" android:textSize="16sp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/about_changelog_link" android:textColor="@color/text_secondary" android:textSize="14sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp" android:text="@string/about_changelog_sub"
+                        android:textColor="@color/text_muted" android:textSize="12sp" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="@color/text_faint" android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card: Contatti -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/bg_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/about_section_contacts"
+                android:textColor="#ffffff"
+                android:textSize="14.5sp"
+                android:textStyle="bold" />
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginBottom="2dp" android:background="@color/border_color" />
+
+            <LinearLayout
+                android:id="@+id/supportLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="26dp" android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp" android:text="🛟" android:textSize="16sp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/about_support_link" android:textColor="@color/text_secondary" android:textSize="14sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp" android:text="@string/about_support_sub"
+                        android:textColor="@color/text_muted" android:textSize="12sp" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="@color/text_faint" android:textSize="20sp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/row_divider" />
+
+            <LinearLayout
+                android:id="@+id/proposeLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="26dp" android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp" android:text="💡" android:textSize="16sp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/about_propose_link" android:textColor="@color/text_secondary" android:textSize="14sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp" android:text="@string/about_propose_sub"
+                        android:textColor="@color/text_muted" android:textSize="12sp" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="›" android:textColor="@color/text_faint" android:textSize="20sp" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/row_divider" />
+
+            <!-- Indirizzo in chiaro; il tocco apre una email senza oggetto -->
+            <LinearLayout
+                android:id="@+id/emailRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp"
+                android:background="?attr/selectableItemBackground">
+                <TextView android:layout_width="26dp" android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp" android:text="📧" android:textSize="16sp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="@string/support_email_address" android:textColor="@color/text_secondary" android:textSize="14sp" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp" android:text="@string/about_email_sub"
+                        android:textColor="@color/text_muted" android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/changelogLink"
+        android:id="@+id/developerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="@string/about_changelog_link"
-        android:textColor="#00d4ff"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/supportLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:text="@string/about_support_link"
-        android:textColor="#00d4ff"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/proposeLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/about_propose_link"
-        android:textColor="#00d4ff"
-        android:textSize="14sp" />
+        android:textColor="@color/text_faint"
+        android:textSize="12.5sp" />
 
 </LinearLayout>
+</ScrollView>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cerchietto verde del "✓ Hai già l'ultima versione" (Info, 2026-09-29) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="#2e4caf50" />
+</shape>

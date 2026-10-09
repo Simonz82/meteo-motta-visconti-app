@@ -2,6 +2,23 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.6 (versionCode 55) — 2026-09-29, pubblicata su Google Play Store il 2026-10-07
+
+### Aggiunto
+- Accesso con Google: pulsante "Accedi con Google" (Credential Manager con selettore account, e ripiego automatico sul metodo classico `GoogleSignIn` se il primo fallisce); messaggi di errore con il codice preciso invece di un errore generico
+- Ponte `getToken()` per le pagine del sito aperte nell'app (serve alla sezione Sagre ed Eventi per inviare e moderare le locandine)
+- Selettore dei temi in un popup dedicato con anteprima dei colori
+
+### Modificato
+- Restyling delle schermate Account, Impostazioni notifiche e Info app nello stesso stile "glass" del sito (card arrotondate, pulsanti rotondi, interruttori colorati)
+- Info app: versione installata, avviso "Hai già l'ultima versione" o pulsante "Aggiorna ora", sezioni Novità e Contatti
+- Nuova immagine di copertina, a tutto schermo senza bande nere
+- Registrazione e account: la tastiera non copre più i campi in basso, la schermata scorre fino al campo selezionato
+
+### Corretto
+- Caricamento file dal sito dentro l'app (pulsante "Sfoglia" delle sagre): prima non faceva nulla; ora si aprono anche i messaggi `alert()`/`confirm()` delle pagine
+- Regole R8/ProGuard esplicite per il ponte JavaScript e per Credential Manager, che venivano rimossi dalla build di release
+
 ## v1.9.5 (versionCode 36) — 2026-09-17
 
 ### Modificato

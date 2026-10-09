@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 
@@ -16,10 +19,22 @@ class AboutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
 
+        // Edge-to-edge obbligatorio da targetSdk 36: il contenuto va tenuto
+        // lontano da status bar e barra di navigazione a mano (come Notifiche).
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.aboutScroll)) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
+
+        findViewById<TextView>(R.id.developerText).text =
+            HtmlCompat.fromHtml(getString(R.string.about_developer), HtmlCompat.FROM_HTML_MODE_LEGACY)
+
         findViewById<android.widget.ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
         val versionText: TextView = findViewById(R.id.versionText)
         val updateStatusText: TextView = findViewById(R.id.updateStatusText)
+        val upToDateRow: android.view.View = findViewById(R.id.upToDateRow)
         val updateCard: android.widget.LinearLayout = findViewById(R.id.updateCard)
         val updateVersionText: TextView = findViewById(R.id.updateVersionText)
         val btnUpdateNow: Button = findViewById(R.id.btnUpdateNow)
@@ -32,14 +47,14 @@ class AboutActivity : AppCompatActivity() {
             versionText.text = ""
         }
 
-        findViewById<TextView>(R.id.changelogLink).setOnClickListener {
+        findViewById<android.view.View>(R.id.changelogLink).setOnClickListener {
             val uri = Uri.parse("https://meteo.nas.vagitaly.it/changelog.html")
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
 
         // Oggetto con prefisso diverso per categoria: permette di smistare/filtrare
         // le email in arrivo (supporto vs proposte) senza altra infrastruttura.
-        findViewById<TextView>(R.id.supportLink).setOnClickListener {
+        findViewById<android.view.View>(R.id.supportLink).setOnClickListener {
             val body = getString(
                 R.string.support_email_body,
                 installedVersionName,
@@ -50,18 +65,23 @@ class AboutActivity : AppCompatActivity() {
             sendCategorizedEmail(getString(R.string.support_email_subject), body)
         }
 
-        findViewById<TextView>(R.id.proposeLink).setOnClickListener {
+        findViewById<android.view.View>(R.id.proposeLink).setOnClickListener {
             sendCategorizedEmail(getString(R.string.propose_email_subject), "")
         }
 
-        checkForUpdate(updateStatusText, updateCard, updateVersionText, btnUpdateNow)
+        // Riga con l'indirizzo in chiaro: email libera, senza oggetto predefinito.
+        findViewById<android.view.View>(R.id.emailRow).setOnClickListener {
+            sendCategorizedEmail("", "")
+        }
+
+        checkForUpdate(updateStatusText, upToDateRow, updateCard, updateVersionText, btnUpdateNow)
     }
 
     private fun sendCategorizedEmail(subject: String, body: String) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email_address)))
-            putExtra(Intent.EXTRA_SUBJECT, subject)
+            if (subject.isNotEmpty()) putExtra(Intent.EXTRA_SUBJECT, subject)
             if (body.isNotEmpty()) putExtra(Intent.EXTRA_TEXT, body)
         }
         try {
@@ -77,6 +97,7 @@ class AboutActivity : AppCompatActivity() {
     // numero della versione disponibile, solo se ce n'e' una piu' nuova.
     private fun checkForUpdate(
         updateStatusText: TextView,
+        upToDateRow: android.view.View,
         updateCard: android.widget.LinearLayout,
         updateVersionText: TextView,
         btnUpdateNow: Button
@@ -85,7 +106,7 @@ class AboutActivity : AppCompatActivity() {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             if (info.updateAvailability() != UpdateAvailability.UPDATE_AVAILABLE) {
                 updateStatusText.text = getString(R.string.about_up_to_date)
-                updateStatusText.visibility = TextView.VISIBLE
+                upToDateRow.visibility = android.view.View.VISIBLE
                 return@addOnSuccessListener
             }
 

@@ -3,7 +3,7 @@
 App Android nativa per la [Stazione Meteo di Motta Visconti](https://meteo.nas.vagitaly.it/) — mostra la stessa dashboard del sito web con registrazione opzionale per personalizzare le notifiche.
 
 🔗 **Sito web / progetto sorella:** [meteo-motta-visconti-web](https://github.com/Simonz82/meteo-motta-visconti-web)
-📲 **Download:** dal pulsante nel footer del [sito](https://meteo.nas.vagitaly.it/) — aggiornamento in-app automatico dopo la prima installazione
+📲 **Download:** [Google Play Store](https://play.google.com/store/apps/details?id=it.meteomottavisconti) — gli aggiornamenti arrivano dal Play Store
 
 ## Cos'è
 
@@ -14,7 +14,7 @@ Un'app nativa (Kotlin) che avvolge il sito in una WebView per la dashboard princ
 - 🔒 **Accesso biometrico** — impronta o volto per un accesso rapido, password cifrata con una chiave hardware del telefono (Android Keystore), utilizzabile solo dopo verifica biometrica live
 - 🔔 **Notifiche personalizzabili** — Allerta Meteo, Fulmine vicino (<5 km), Inizio pioggia, Nuovo record storico, Nuova versione app — ciascuna con fascia oraria configurabile, consegnate via Firebase Cloud Messaging
 - 🎨 **Temi selezionabili** — Scuro (predefinito), Chiaro, Black (AMOLED), Blu, Green, Pink, Red
-- 🔄 **Aggiornamento automatico** — l'app stessa rileva quando è disponibile una versione più recente e propone il download, senza necessità del Play Store
+- 🔄 **Aggiornamento automatico** — l'app controlla sul Google Play Store se esiste una versione più recente e apre la scheda per aggiornarla
 - 🔑 **Recupero password** — richiesta di reset via email
 
 ## Stack tecnico

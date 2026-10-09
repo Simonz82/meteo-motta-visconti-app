@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loginScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:background="@color/site_background">
 
     <LinearLayout
@@ -37,6 +39,24 @@
             android:text="@string/login_subtitle"
             android:textColor="#9e9e9e"
             android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:textColor="#1c1f24"
+            android:text="@string/google_signin_button" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/or_divider"
+            android:textColor="#777777"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/nomeInput"

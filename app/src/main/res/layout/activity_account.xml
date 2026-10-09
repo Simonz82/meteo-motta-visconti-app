@@ -1,51 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Restyle 2026-09-25: card in stile "glass" (tema Scuro/default), coerente con la
+     dashboard web. Stessi id/tipi di widget di prima (nessuna modifica a
+     AccountActivity.kt necessaria): EditText nomeInput/cognomeInput/cittaInput/
+     dayInput/monthInput/yearInput/noteInput, TextView emailText/changeEmailLink/
+     ageText/completeProfileBanner/editNomeLink/editCognomeLink/editDataLink/
+     editCittaLink, Button btnSave/btnLogout (ora MaterialButton, resta
+     assegnabile a android.widget.Button). -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/accountScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:background="@color/site_background">
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="20dp">
 
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:tint="#ffffff"
-        android:contentDescription="@string/back" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/account_title"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/emailText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:textColor="#00d4ff"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="18dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#ffffff"
+            android:contentDescription="@string/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="@string/account_title"
+            android:textColor="#ffffff"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/changeEmailLink"
-        android:layout_width="wrap_content"
+        android:id="@+id/completeProfileBanner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:text="@string/change_email_link"
-        android:textColor="#9e9e9e"
-        android:textSize="12sp" />
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/bg_pill_accent"
+        android:padding="14dp"
+        android:text="@string/account_complete_profile_banner"
+        android:textColor="@color/accent"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Card: profilo (email) -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="@color/bg_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/accent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="👤"
+                    android:textSize="20sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/emailText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textSize="15.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/changeEmailLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/change_email_link"
+                    android:textColor="@color/text_muted"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:id="@+id/contentGroup"
@@ -56,224 +124,281 @@
         android:focusableInTouchMode="true"
         android:visibility="gone">
 
-        <LinearLayout
+        <!-- Card: dati personali -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginBottom="14dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/bg_card">
 
-            <EditText
-                android:id="@+id/nomeInput"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/account_nome_hint"
-                android:inputType="textPersonName"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/editNomeLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:padding="6dp"
-                android:text="@string/account_edit_field"
-                android:textColor="#9e9e9e"
-                android:textSize="12sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/account_section_dati_personali"
+                    android:textColor="#ffffff"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold" />
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginBottom="14dp" android:background="@color/border_color" />
 
-        </LinearLayout>
+                <!-- Nome -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/account_nome_hint" android:textColor="@color/text_faint" android:textSize="11sp" android:layout_marginBottom="6dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <EditText
+                        android:id="@+id/nomeInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_box"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="10dp"
+                        android:hint="@string/account_nome_hint"
+                        android:inputType="textPersonName"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textColorHint="@color/text_faint" />
+                    <TextView
+                        android:id="@+id/editNomeLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_pill_accent"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/account_edit_field"
+                        android:textColor="@color/accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-        <LinearLayout
+                <!-- Cognome -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/account_cognome_hint" android:textColor="@color/text_faint" android:textSize="11sp" android:layout_marginBottom="6dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <EditText
+                        android:id="@+id/cognomeInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_box"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="10dp"
+                        android:hint="@string/account_cognome_hint"
+                        android:inputType="textPersonName"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textColorHint="@color/text_faint" />
+                    <TextView
+                        android:id="@+id/editCognomeLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_pill_accent"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/account_edit_field"
+                        android:textColor="@color/accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Data di nascita -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text="@string/account_data_nascita_hint" android:textColor="@color/text_faint" android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/ageText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_input_box"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp">
+
+                        <EditText
+                            android:id="@+id/dayInput"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:hint="@string/date_day_hint"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:gravity="center"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"
+                            android:textColorHint="@color/text_faint" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="/" android:textColor="@color/text_muted" android:textSize="16sp"
+                            android:layout_marginStart="4dp" android:layout_marginEnd="4dp" />
+
+                        <EditText
+                            android:id="@+id/monthInput"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:hint="@string/date_month_hint"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:gravity="center"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"
+                            android:textColorHint="@color/text_faint" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="/" android:textColor="@color/text_muted" android:textSize="16sp"
+                            android:layout_marginStart="4dp" android:layout_marginEnd="4dp" />
+
+                        <EditText
+                            android:id="@+id/yearInput"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.6"
+                            android:background="@android:color/transparent"
+                            android:hint="@string/date_year_hint"
+                            android:inputType="number"
+                            android:maxLength="4"
+                            android:gravity="center"
+                            android:textColor="#ffffff"
+                            android:textSize="15sp"
+                            android:textColorHint="@color/text_faint" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/editDataLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_pill_accent"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/account_edit_field"
+                        android:textColor="@color/accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Città -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/account_citta_hint" android:textColor="@color/text_faint" android:textSize="11sp" android:layout_marginBottom="6dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical">
+                    <EditText
+                        android:id="@+id/cittaInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_box"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="10dp"
+                        android:hint="@string/account_citta_hint"
+                        android:inputType="textCapWords"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textColorHint="@color/text_faint" />
+                    <TextView
+                        android:id="@+id/editCittaLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_pill_accent"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="8dp"
+                        android:text="@string/account_edit_field"
+                        android:textColor="@color/accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card: note -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
+            android:layout_marginBottom="18dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/bg_card">
 
-            <EditText
-                android:id="@+id/cognomeInput"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/account_cognome_hint"
-                android:inputType="textPersonName"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <TextView
-                android:id="@+id/editCognomeLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:padding="6dp"
-                android:text="@string/account_edit_field"
-                android:textColor="#9e9e9e"
-                android:textSize="12sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/account_section_note"
+                    android:textColor="#ffffff"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/noteInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_input_box"
+                    android:padding="12dp"
+                    android:hint="@string/account_note_hint"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3"
+                    android:gravity="top|start"
+                    android:textColor="#ffffff"
+                    android:textSize="14sp"
+                    android:textColorHint="@color/text_faint" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/account_data_nascita_hint"
-                android:textColor="#9e9e9e"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/ageText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#00d4ff"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/editDataLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:padding="6dp"
-                android:text="@string/account_edit_field"
-                android:textColor="#9e9e9e"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="4dp">
-
-            <EditText
-                android:id="@+id/dayInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/date_day_hint"
-                android:inputType="number"
-                android:maxLength="2"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textColor="#9e9e9e"
-                android:textSize="18sp"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp" />
-
-            <EditText
-                android:id="@+id/monthInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/date_month_hint"
-                android:inputType="number"
-                android:maxLength="2"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textColor="#9e9e9e"
-                android:textSize="18sp"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp" />
-
-            <EditText
-                android:id="@+id/yearInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:hint="@string/date_year_hint"
-                android:inputType="number"
-                android:maxLength="4"
-                android:gravity="center"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
-
-            <EditText
-                android:id="@+id/cittaInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/account_citta_hint"
-                android:inputType="textCapWords"
-                android:textColor="#ffffff"
-                android:textColorHint="#777777"
-                android:backgroundTint="#00d4ff" />
-
-            <TextView
-                android:id="@+id/editCittaLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:padding="6dp"
-                android:text="@string/account_edit_field"
-                android:textColor="#9e9e9e"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/noteInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/account_note_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:minLines="3"
-            android:gravity="top|start"
-            android:textColor="#ffffff"
-            android:textColorHint="#777777"
-            android:backgroundTint="#00d4ff" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#00d4ff"
+            android:layout_height="52dp"
+            android:layout_marginBottom="14dp"
+            app:cornerRadius="15dp"
+            android:backgroundTint="@color/accent"
+            android:textColor="#00222a"
+            android:textStyle="bold"
             android:text="@string/save_button" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#3a1c1c"
-            android:textColor="#ff8080"
+            android:layout_height="52dp"
+            app:cornerRadius="15dp"
+            app:strokeColor="@color/danger_border"
+            android:backgroundTint="@color/danger_bg"
+            android:textColor="@color/danger"
             android:text="@string/account_logout_button" />
 
     </LinearLayout>

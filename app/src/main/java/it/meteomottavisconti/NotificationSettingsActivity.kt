@@ -3,10 +3,12 @@ package it.meteomottavisconti
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import org.json.JSONObject
@@ -19,6 +21,18 @@ class NotificationSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification_settings)
+
+        // Fix 2026-09-26: schermo mai messo in sicurezza per l'edge-to-edge
+        // forzato da targetSdk 36 (stesso problema gia' risolto a suo tempo su
+        // MainActivity/LoginActivity/AccountActivity, ma non su questo schermo).
+        // La X sotto la status bar e il contenuto tagliato dalla barra di
+        // sistema in basso erano dovuti a questo, non al restyle di ieri.
+        val notifScroll: android.widget.ScrollView = findViewById(R.id.notifScroll)
+        ViewCompat.setOnApplyWindowInsetsListener(notifScroll) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
 
         findViewById<android.widget.ImageButton>(R.id.btnBack).setOnClickListener { finish() }
 
@@ -37,15 +51,18 @@ class NotificationSettingsActivity : AppCompatActivity() {
             return
         }
 
-        val checkAllerta = findViewById<CheckBox>(R.id.checkAllerta)
-        val checkFulmine = findViewById<CheckBox>(R.id.checkFulmine)
-        val checkPioggia = findViewById<CheckBox>(R.id.checkPioggia)
-        val checkRecord = findViewById<CheckBox>(R.id.checkRecord)
-        val checkAppUpdate = findViewById<CheckBox>(R.id.checkAppUpdate)
-        val checkNewsMotta = findViewById<CheckBox>(R.id.checkNewsMotta)
-        val checkNewsCasorate = findViewById<CheckBox>(R.id.checkNewsCasorate)
-        val checkNewsBereguardo = findViewById<CheckBox>(R.id.checkNewsBereguardo)
-        val checkNewsBesate = findViewById<CheckBox>(R.id.checkNewsBesate)
+        // 2026-09-25: CheckBox -> SwitchMaterial (restyle in stile "card" come la
+        // dashboard web), stessa API isChecked, nessun'altra modifica di logica.
+        val checkAllerta = findViewById<SwitchMaterial>(R.id.checkAllerta)
+        val checkFulmine = findViewById<SwitchMaterial>(R.id.checkFulmine)
+        val checkPioggia = findViewById<SwitchMaterial>(R.id.checkPioggia)
+        val checkUv = findViewById<SwitchMaterial>(R.id.checkUv)
+        val checkRecord = findViewById<SwitchMaterial>(R.id.checkRecord)
+        val checkAppUpdate = findViewById<SwitchMaterial>(R.id.checkAppUpdate)
+        val checkNewsMotta = findViewById<SwitchMaterial>(R.id.checkNewsMotta)
+        val checkNewsCasorate = findViewById<SwitchMaterial>(R.id.checkNewsCasorate)
+        val checkNewsBereguardo = findViewById<SwitchMaterial>(R.id.checkNewsBereguardo)
+        val checkNewsBesate = findViewById<SwitchMaterial>(R.id.checkNewsBesate)
         val btnOrarioDa = findViewById<Button>(R.id.btnOrarioDa)
         val btnOrarioA = findViewById<Button>(R.id.btnOrarioA)
         val btnSave = findViewById<android.widget.Button>(R.id.btnSave)
@@ -70,6 +87,9 @@ class NotificationSettingsActivity : AppCompatActivity() {
                 checkAllerta.isChecked = prefs.optBoolean("allerta_meteo", true)
                 checkFulmine.isChecked = prefs.optBoolean("fulmine_vicino", true)
                 checkPioggia.isChecked = prefs.optBoolean("inizia_a_piovere", false)
+                // Stesso default (1/true) usato lato backend, vedi notification_prefs
+                // in db.php (colonna uv_alto aggiunta 2026-09-13).
+                checkUv.isChecked = prefs.optBoolean("uv_alto", true)
                 checkRecord.isChecked = prefs.optBoolean("nuovo_record", true)
                 checkAppUpdate.isChecked = prefs.optBoolean("app_update", true)
                 checkNewsMotta.isChecked = prefs.optBoolean("news_motta", false)
@@ -96,6 +116,7 @@ class NotificationSettingsActivity : AppCompatActivity() {
                 .put("allerta_meteo", checkAllerta.isChecked)
                 .put("fulmine_vicino", checkFulmine.isChecked)
                 .put("inizia_a_piovere", checkPioggia.isChecked)
+                .put("uv_alto", checkUv.isChecked)
                 .put("nuovo_record", checkRecord.isChecked)
                 .put("app_update", checkAppUpdate.isChecked)
                 .put("news_motta", checkNewsMotta.isChecked)

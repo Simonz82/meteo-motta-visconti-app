@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/themeRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp">
+
+    <View
+        android:id="@+id/themeSwatch"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:id="@+id/themeLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="14.5sp" />
+
+    <TextView
+        android:id="@+id/themeCheck"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="✓"
+        android:textColor="#00222a"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:background="@drawable/bg_circle_accent"
+        android:visibility="gone" />
+</LinearLayout>

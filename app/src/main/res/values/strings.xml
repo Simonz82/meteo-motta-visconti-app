@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Meteo Motta Visconti</string>
+    <string name="app_name">Motta Visconti Meteo e Info</string>
     <string name="site_url">https://meteo.nas.vagitaly.it/</string>
     <string name="menu_button_description">Apri menu</string>
     <string name="menu_account_login">Accedi / Registrati</string>
@@ -9,6 +9,10 @@
     <string name="login_title">Accedi</string>
     <string name="register_title">Registrati</string>
     <string name="login_subtitle">Accedi o registrati per personalizzare le notifiche</string>
+    <string name="google_signin_button">Continua con Google</string>
+    <string name="or_divider">oppure</string>
+    <string name="error_google_signin">Accesso con Google non riuscito. Riprova.</string>
+    <string name="account_complete_profile_banner">Ultimo passo: aggiungi città e data di nascita per completare la registrazione.</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="login_button">Accedi</string>
@@ -32,9 +36,11 @@
     <string name="notifications_title">Notifiche</string>
     <string name="notifications_login_required">Per personalizzare le notifiche devi prima accedere o registrarti.</string>
     <string name="notif_allerta_meteo">Allerta Meteo (Protezione Civile)</string>
+    <string name="notif_section_allerte">Allerte meteo</string>
     <string name="notif_fulmine_vicino">Fulmine vicino (meno di 5 km)</string>
     <string name="notif_inizia_a_piovere">Inizia a Piovere (rilevato da stazione)</string>
     <string name="notif_nuovo_record">Nuovo Record Storico</string>
+    <string name="notif_uv_alto">Indice UV elevato</string>
     <string name="notif_app_update">Nuova versione app disponibile</string>
     <string name="notif_news_section_title">Notizie locali</string>
     <string name="notif_news_motta">Notizie - Motta Visconti</string>
@@ -50,6 +56,7 @@
     <string name="preferences_saved">Preferenze salvate</string>
 
     <string name="account_title">Il mio account</string>
+    <string name="account_section_dati_personali">Dati personali</string>
     <string name="account_nome_hint">Nome *</string>
     <string name="account_cognome_hint">Cognome *</string>
     <string name="account_data_nascita_hint">Data di nascita *</string>
@@ -58,6 +65,7 @@
     <string name="date_month_hint">MM</string>
     <string name="date_year_hint">AAAA</string>
     <string name="account_note_hint">Note personali (facoltative)</string>
+    <string name="account_section_note">Note</string>
     <string name="account_save_success">Dati salvati</string>
     <string name="account_logout_button">Esci dall\'account</string>
     <string name="account_logout_confirm_title">Uscire dall\'account?</string>
@@ -86,16 +94,25 @@
     <string name="notif_channel_name">Allerte Meteo</string>
     <string name="notif_channel_description">Notifiche push per allerte meteo, fulmini, pioggia e novità dell\'app</string>
 
-    <string name="about_developer">Sviluppato e curato da Simonz82</string>
+    <string name="about_developer">Sviluppato e curato da <b>Simonz82</b></string>
     <string name="about_version_format">Versione %1$s</string>
-    <string name="about_changelog_link">Vedi il changelog completo</string>
-    <string name="about_up_to_date">Hai già l\'ultima versione disponibile</string>
+    <string name="about_changelog_link">Changelog completo</string>
+    <string name="about_up_to_date">Hai già l\'ultima versione</string>
     <string name="about_update_available">Nuova versione disponibile: %1$s (la tua è %2$s)</string>
-    <string name="about_update_available_playstore">È disponibile un aggiornamento su Google Play.</string>
-    <string name="about_update_heading">🚀 AGGIORNA APP</string>
+    <string name="about_update_available_playstore">È disponibile una nuova versione su Google Play.</string>
+    <string name="about_update_heading">🚀 Aggiornamento disponibile</string>
+    <string name="about_update_now">Aggiorna ora</string>
+    <string name="about_title">Info app</string>
+    <string name="about_section_news">📋 Novità</string>
+    <string name="about_changelog_sub">Tutte le novità, versione per versione</string>
+    <string name="about_section_contacts">✉️ Contatti</string>
+    <string name="about_support_sub">Segnala un problema, allega i dati del telefono</string>
+    <string name="about_propose_sub">Dati, viste o funzioni che vorresti</string>
+    <string name="about_email_sub">Indirizzo di contatto</string>
 
     <string name="theme_picker_title">Scegli il tema</string>
     <string name="dialog_cancel">Annulla</string>
+    <string name="dialog_close">Chiudi</string>
 
     <string name="register_prompt_title">Sblocca tutte le funzioni dell\'app</string>
     <string name="register_prompt_message">Registrati gratis per attivare le notifiche personalizzate (allerte, fulmini, pioggia, record storici), scegliere il tuo tema preferito e sbloccare le prossime novità. Puoi comunque continuare a usare l\'app senza registrarti.</string>
@@ -103,7 +120,7 @@
     <string name="register_prompt_negative">Più tardi</string>
 
     <string name="about_support_link">Richiedi supporto</string>
-    <string name="about_propose_link">Proponi una novità (dati, viste, funzioni)</string>
+    <string name="about_propose_link">Proponi una novità</string>
     <string name="support_email_address">meteo.motta@gmail.com</string>
     <string name="support_email_subject">[Supporto App Meteo] </string>
     <string name="propose_email_subject">[Proposta App Meteo] </string>

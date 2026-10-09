@@ -8,11 +8,14 @@ import android.os.Bundle
 import android.webkit.JavascriptInterface
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,6 +37,28 @@ class MainActivity : AppCompatActivity() {
 
     private val siteHost = "meteo.nas.vagitaly.it"
 
+    // Selettore file per i campi <input type="file"> del sito (es. locandine
+    // di sagre.html, sia invio sia "Modifica"). Senza un WebChromeClient che
+    // gestisca onShowFileChooser, dentro la WebView il pulsante "Sfoglia" non
+    // fa nulla. La callback va SEMPRE chiamata (anche con null se l'utente
+    // annulla), altrimenti la WebView non riapre piu' il selettore.
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private val fileChooserLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val data = result.data
+        val uris: Array<Uri>? = if (result.resultCode == RESULT_OK && data != null) {
+            val clip = data.clipData
+            when {
+                clip != null && clip.itemCount > 0 -> Array(clip.itemCount) { clip.getItemAt(it).uri }
+                data.data != null -> arrayOf(data.data!!)
+                else -> null
+            }
+        } else null
+        filePathCallback?.onReceiveValue(uris)
+        filePathCallback = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,10 +67,30 @@ class MainActivity : AppCompatActivity() {
         // sistema per obbligo (non e' piu' possibile disattivarlo): rimettiamo noi il
         // padding equivalente cosi' il pulsante menu e il contenuto della pagina restano
         // sotto la barra di stato e sopra la barra di navigazione, come prima.
+        //
+        // L'inset della tastiera (ime()) va gestito qui per lo stesso motivo: con
+        // l'edge-to-edge forzato, il solo windowSoftInputMode="adjustResize" nel
+        // manifest non basta piu' a far restringere il WebView quando la tastiera si
+        // apre (a differenza di Login/AccountActivity, che usano fitsSystemWindows e
+        // quindi lo ottengono gratis). Senza questo padding, i popup dentro la pagina
+        // (es. il modulo di registrazione) restano coperti dalla tastiera e non si puo'
+        // scrollare per vedere i campi sotto.
         val contentFrame = findViewById<android.widget.FrameLayout>(R.id.contentFrame)
-        ViewCompat.setOnApplyWindowInsetsListener(contentFrame) { view, insets ->
+        val webViewForInsets = findViewById<WebView>(R.id.webView)
+        val drawerLayoutForInsets = findViewById<DrawerLayout>(R.id.drawerLayout)
+        // L'ascoltatore va agganciato sulla ROOT (drawerLayout), non su contentFrame:
+        // DrawerLayout gestisce a modo suo gli inset per il proprio edge-to-edge e puo'
+        // "consumarli" prima che arrivino ai figli, cosi' un listener piu' in basso
+        // rischia di non vedere mai l'inset ime() aggiornarsi. Da qui applichiamo poi
+        // il padding ai due punti giusti: contentFrame per le barre di sistema (come
+        // prima), il WebView stesso per la tastiera - direttamente su di lui, non su
+        // un antenato, cosi' non dipendiamo dalla propagazione a cascata del padding
+        // attraverso SwipeRefreshLayout.
+        ViewCompat.setOnApplyWindowInsetsListener(drawerLayoutForInsets) { _, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            contentFrame.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            webViewForInsets.setPadding(0, 0, 0, ime.bottom)
             insets
         }
 
@@ -140,10 +185,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var sessionStartMillis: Long = 0L
+    private var pausedAtMillis: Long = 0L
 
     override fun onResume() {
         super.onResume()
         sessionStartMillis = System.currentTimeMillis()
+        // Tornando in primo piano dopo almeno 10 minuti la pagina si ricarica subito,
+        // cosi' mostra sempre dati aggiornati (non quella rimasta in memoria).
+        if (pausedAtMillis > 0 && System.currentTimeMillis() - pausedAtMillis > 10 * 60 * 1000L) {
+            webView.reload()
+        }
+        pausedAtMillis = 0L
         // Rete di sicurezza: se l'invio dopo login/registrazione non e' arrivato
         // (versione app precedente al fix, o l'app e' stata chiusa troppo in
         // fretta prima che la richiesta di rete finisse), si corregge da solo
@@ -153,6 +205,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        pausedAtMillis = System.currentTimeMillis()
         if (sessionStartMillis > 0) {
             val seconds = ((System.currentTimeMillis() - sessionStartMillis) / 1000).toInt()
             sessionStartMillis = 0L
@@ -254,25 +307,57 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "$feature — disponibile in una prossima versione", Toast.LENGTH_SHORT).show()
     }
 
-    // Elenco temi disponibili: applicato subito alla WebView già caricata,
+    // Restyle 2026-09-26: card in stile "glass" (dialog_theme_picker.xml +
+    // row_theme_item.xml) al posto del setSingleChoiceItems di sistema, coerente
+    // con Notifiche/Account. Righe costruite a runtime dai colori reali di ogni
+    // tema (ThemeManager.SWATCHES). Applicato subito alla WebView già caricata,
     // e ri-applicato automaticamente ad ogni pagina successiva (onPageFinished).
     private fun showThemePicker() {
-        val keys = ThemeManager.THEMES.keys.toList()
-        val labels = ThemeManager.THEMES.values.toTypedArray()
+        val view = android.view.LayoutInflater.from(this).inflate(R.layout.dialog_theme_picker, null)
+        val container = view.findViewById<android.widget.LinearLayout>(R.id.themeRowsContainer)
         val current = ThemeManager.getTheme(this)
-        val checkedIndex = keys.indexOf(current).coerceAtLeast(0)
 
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.theme_picker_title))
-            .setSingleChoiceItems(labels, checkedIndex) { dialog, which ->
-                val chosen = keys[which]
-                ThemeManager.setTheme(this, chosen)
-                applyThemeToWebView(chosen)
-                AccountManager.getToken(this)?.let { token -> ApiClient.setTheme(token, chosen) { } }
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .setCancelable(true)
+            .create()
+
+        val density = resources.displayMetrics.density
+        container.removeAllViews()
+        for ((key, label) in ThemeManager.THEMES) {
+            val row = android.view.LayoutInflater.from(this).inflate(R.layout.row_theme_item, container, false)
+            val rowRoot = row.findViewById<android.widget.LinearLayout>(R.id.themeRow)
+            val swatch = row.findViewById<android.view.View>(R.id.themeSwatch)
+            val labelView = row.findViewById<TextView>(R.id.themeLabel)
+            val check = row.findViewById<TextView>(R.id.themeCheck)
+
+            val sw = ThemeManager.SWATCHES[key]
+            swatch.background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(android.graphics.Color.parseColor(sw?.accent ?: "#00d4ff"))
+                setStroke((2 * density).toInt(), android.graphics.Color.parseColor(sw?.border ?: "#000000"))
+            }
+
+            labelView.text = label
+            val isSelected = key == current
+            check.visibility = if (isSelected) android.view.View.VISIBLE else android.view.View.GONE
+            labelView.setTypeface(null, if (isSelected) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+            labelView.setTextColor(android.graphics.Color.parseColor(if (isSelected) "#ffffff" else "#e1e1e1"))
+            rowRoot.setBackgroundColor(android.graphics.Color.parseColor(if (isSelected) "#1a00d4ff" else "#00000000"))
+
+            rowRoot.setOnClickListener {
+                ThemeManager.setTheme(this, key)
+                applyThemeToWebView(key)
+                AccountManager.getToken(this)?.let { token -> ApiClient.setTheme(token, key) { } }
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.dialog_cancel), null)
-            .show()
+            container.addView(row)
+        }
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseThemeDialog)
+            .setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
     }
 
     private fun applyThemeToWebView(theme: String) {
@@ -294,7 +379,8 @@ class MainActivity : AppCompatActivity() {
         settings.domStorageEnabled = true
         settings.loadWithOverviewMode = true
         settings.useWideViewPort = true
-        settings.cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+        // Mai cache: ogni pagina si apre sempre fresca dal server (richiesta esplicita).
+        settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
         // Marcatore per far distinguere al sito "sono nell'app" da "sono nel
         // browser": usato per nascondere il banner "scarica l'app" e il suo
         // pulsante lampeggiante quando la pagina gira gia' dentro l'app.
@@ -323,6 +409,46 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Gestisce il selettore file dei campi <input type="file"> (vedi
+        // fileChooserLauncher). Come effetto collaterale utile, avere un
+        // WebChromeClient fa comparire anche i dialoghi JS alert()/confirm()
+        // del sito, che senza nessun WebChromeClient la WebView ignora.
+        webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                view: WebView,
+                callback: ValueCallback<Array<Uri>>,
+                params: FileChooserParams
+            ): Boolean {
+                filePathCallback?.onReceiveValue(null)
+                filePathCallback = callback
+                // accept="image/jpeg,image/png,application/pdf" arriva come
+                // elenco: si passa tutto come EXTRA_MIME_TYPES (createIntent()
+                // di sistema ne userebbe uno solo).
+                val mimeTypes = params.acceptTypes
+                    .flatMap { it.split(",") }
+                    .map { it.trim() }
+                    .filter { it.isNotEmpty() }
+                    .toTypedArray()
+                val intent = android.content.Intent(android.content.Intent.ACTION_GET_CONTENT).apply {
+                    addCategory(android.content.Intent.CATEGORY_OPENABLE)
+                    type = if (mimeTypes.size == 1) mimeTypes[0] else "*/*"
+                    if (mimeTypes.size > 1) putExtra(android.content.Intent.EXTRA_MIME_TYPES, mimeTypes)
+                    putExtra(
+                        android.content.Intent.EXTRA_ALLOW_MULTIPLE,
+                        params.mode == FileChooserParams.MODE_OPEN_MULTIPLE
+                    )
+                }
+                return try {
+                    fileChooserLauncher.launch(android.content.Intent.createChooser(intent, "Scegli un file"))
+                    true
+                } catch (e: Exception) {
+                    filePathCallback = null
+                    Toast.makeText(this@MainActivity, "Nessuna app per scegliere i file", Toast.LENGTH_SHORT).show()
+                    false
+                }
+            }
+        }
+
         // Senza questo listener, i link di download (es. l'APK stesso) cliccati
         // dentro la WebView non fanno nulla: serve passarli esplicitamente al sistema.
         webView.setDownloadListener { url, _, _, _, _ ->
@@ -345,6 +471,15 @@ class MainActivity : AppCompatActivity() {
     private class WebAppBridge(private val activity: MainActivity) {
         @JavascriptInterface
         fun isLoggedIn(): Boolean = AccountManager.isLoggedIn(activity)
+
+        // Espone il vero token di sessione nativo (lo stesso usato da
+        // ApiClient per le chiamate dell'app) alle pagine web caricate nella
+        // WebView - senza questo, pagine come "Sagre nei dintorni" vedono
+        // sempre "non loggato" dentro l'app: il sistema account "web"
+        // (localStorage) e' un meccanismo separato che qui dentro non esiste
+        // mai, per design. Null se non loggato, esattamente come isLoggedIn().
+        @JavascriptInterface
+        fun getToken(): String? = AccountManager.getToken(activity)
 
         // Il pull-to-refresh nativo (SwipeRefreshLayout) guarda solo se la
         // WebView nel suo complesso puo' scorrere verso l'alto: non sa nulla

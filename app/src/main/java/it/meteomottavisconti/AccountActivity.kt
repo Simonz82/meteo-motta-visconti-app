@@ -9,14 +9,45 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class AccountActivity : AppCompatActivity() {
+
+    companion object {
+        // Passato da LoginActivity dopo un primo accesso con Google: citta' e data di
+        // nascita non arrivano da Google e vanno chieste subito, come nella
+        // registrazione via email. Finche' non sono compilate, questa schermata non
+        // si puo' chiudere senza salvare (vedi onBackPressed sotto).
+        const val EXTRA_FORCE_COMPLETE_PROFILE = "force_complete_profile"
+    }
+
+    private var forceCompleteProfile = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
+        forceCompleteProfile = intent.getBooleanExtra(EXTRA_FORCE_COMPLETE_PROFILE, false)
 
-        findViewById<android.widget.ImageButton>(R.id.btnBack).setOnClickListener { finish() }
+        // Stesso fix IME di LoginActivity: con l'edge-to-edge forzato da targetSdk 36,
+        // adjustResize da solo non fa piu' scorrere il form quando la tastiera si apre.
+        val accountScroll: android.widget.ScrollView = findViewById(R.id.accountScroll)
+        ViewCompat.setOnApplyWindowInsetsListener(accountScroll) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            view.setPadding(bars.left, bars.top, bars.right, maxOf(bars.bottom, ime.bottom))
+            insets
+        }
+
+        val btnBack = findViewById<android.widget.ImageButton>(R.id.btnBack)
+        if (forceCompleteProfile) {
+            // Niente via di fuga finche' il profilo non e' completo: nascondiamo la X
+            // e ignoriamo il tasto Indietro di sistema (vedi onBackPressed sotto).
+            btnBack.visibility = android.view.View.GONE
+            findViewById<TextView>(R.id.completeProfileBanner).visibility = android.view.View.VISIBLE
+        } else {
+            btnBack.setOnClickListener { finish() }
+        }
 
         val emailText = findViewById<TextView>(R.id.emailText)
         val nomeInput = findViewById<EditText>(R.id.nomeInput)
@@ -111,6 +142,15 @@ class AccountActivity : AppCompatActivity() {
 
                 // I campi precompilati partono bloccati (vedi lockField sopra).
                 lockField(nomeInput, cognomeInput, cittaInput, dayInput, monthInput, yearInput)
+                if (forceCompleteProfile) {
+                    // Citta' e data di nascita sono quelle che mancano davvero (Google non
+                    // le fornisce): le lasciamo subito sbloccate e pronte da compilare,
+                    // nascondendo i rispettivi link "Modifica" che non servono piu'.
+                    unlockField(cittaInput)
+                    unlockField(dayInput, monthInput, yearInput)
+                    editCittaLink.visibility = android.view.View.GONE
+                    editDataLink.visibility = android.view.View.GONE
+                }
                 // Precompilare i campi data sposta il focus da un campo all'altro
                 // (avanzamento automatico pensato per la digitazione manuale):
                 // qui riportiamo il focus sul contenitore cosi' non resta un
@@ -140,6 +180,19 @@ class AccountActivity : AppCompatActivity() {
                 combined
             }
 
+            if (forceCompleteProfile) {
+                // Stessi campi obbligatori della registrazione via email (vedi
+                // register.php) - qui mancano solo perche' Google non li fornisce.
+                if (citta.isEmpty()) {
+                    Toast.makeText(this, getString(R.string.error_citta_required), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (dataNascita == null) {
+                    Toast.makeText(this, getString(R.string.error_birth_date_required), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
+
             btnSave.isEnabled = false
             ApiClient.updateAccount(token, nome, cognome, dataNascita, citta, note) { result ->
                 btnSave.isEnabled = true
@@ -150,6 +203,9 @@ class AccountActivity : AppCompatActivity() {
                     AccountManager.updateName(this, nome)
                     if (dataNascita != null) aggiornaEta(result.json, dataNascita) else ageText.text = ""
                     Toast.makeText(this, getString(R.string.account_save_success), Toast.LENGTH_SHORT).show()
+                    // Profilo completato: da qui in poi e' un account a tutti gli effetti,
+                    // si torna alla schermata principale come dopo una registrazione normale.
+                    if (forceCompleteProfile) finish()
                 } else if (result.statusCode == 401) {
                     sessionExpired()
                 } else if (result.json.optString("error") == "invalid_birth_date") {
@@ -227,6 +283,18 @@ class AccountActivity : AppCompatActivity() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+    }
+
+    @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+    override fun onBackPressed() {
+        if (forceCompleteProfile) {
+            // Stesso blocco della X nascosta sopra: il profilo va completato prima
+            // di poter uscire da qui, coerente col fatto che questi campi sono
+            // obbligatori anche nella registrazione via email.
+            Toast.makeText(this, getString(R.string.account_complete_profile_banner), Toast.LENGTH_SHORT).show()
+            return
+        }
+        super.onBackPressed()
     }
 
     private fun sessionExpired() {

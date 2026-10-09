@@ -62,6 +62,30 @@ object ApiClient {
         }, callback)
     }
 
+    // Diagnostica dell'accesso con Google: un evento per ogni passaggio (tipo di eccezione, codice,
+    // se l'activity e' stata ricreata...). Finisce in un file di log sul server, cosi' si legge la
+    // causa senza chiedere screenshot. NON contiene token, email o altri dati personali.
+    fun googleDiag(stage: String, detail: String) {
+        try {
+            runAsync({
+                val body = JSONObject()
+                    .put("stage", stage.take(60))
+                    .put("detail", detail.take(300))
+                    .put("v", BuildConfig.VERSION_CODE)
+                    .put("sdk", android.os.Build.VERSION.SDK_INT)
+                request("/google_diag.php", "POST", body, null)
+            }, { })
+        } catch (e: Exception) {
+        }
+    }
+
+    fun googleLogin(idToken: String, callback: (ApiResult) -> Unit) {
+        runAsync({
+            val body = JSONObject().put("id_token", idToken)
+            request("/google_login.php", "POST", body, null)
+        }, callback)
+    }
+
     fun getNotificationPrefs(token: String, callback: (ApiResult) -> Unit) {
         runAsync({ request("/notification_prefs.php", "GET", null, token) }, callback)
     }

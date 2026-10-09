@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Restyle 2026-09-26: sostituisce l'AlertDialog di sistema (setSingleChoiceItems)
+     con una card in stile "glass" coerente con Notifiche/Account. Righe tema
+     costruite a runtime in MainActivity.showThemePicker() da row_theme_item.xml. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/bg_card">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:paddingBottom="12dp"
+            android:text="🎨 Scegli tema"
+            android:textColor="#ffffff"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="@color/border_color" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="6dp">
+
+            <LinearLayout
+                android:id="@+id/themeRowsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseThemeDialog"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cornerRadius="14dp"
+            app:strokeColor="@color/border_color_2"
+            android:backgroundTint="@color/bg_card_2"
+            android:textColor="@color/text_muted"
+            android:text="@string/dialog_close" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
