@@ -487,6 +487,24 @@ class MainActivity : AppCompatActivity() {
         // trascinamento verso il basso dentro il popup veniva scambiato per
         // "sono in cima alla pagina, ricarica" invece di scorrere il popup.
         // Il sito chiama questo metodo all'apertura/chiusura di ogni popup.
+        // Popup "sezione riservata agli iscritti" del sito (area_riservata.js):
+        // i suoi pulsanti aprono direttamente la schermata di login nativa.
+        // mode = "google" (selettore account Google subito), "register" (modulo
+        // di registrazione) o "login". Tornando indietro la pagina si sblocca da
+        // sola: controlla getToken() ogni 1,5 secondi.
+        @JavascriptInterface
+        fun openLogin(mode: String?) {
+            activity.runOnUiThread {
+                if (AccountManager.isLoggedIn(activity)) return@runOnUiThread
+                val intent = android.content.Intent(activity, LoginActivity::class.java)
+                when (mode) {
+                    "google" -> intent.putExtra(LoginActivity.EXTRA_AUTO_GOOGLE, true)
+                    "register" -> intent.putExtra(LoginActivity.EXTRA_START_IN_REGISTER_MODE, true)
+                }
+                activity.startActivity(intent)
+            }
+        }
+
         @JavascriptInterface
         fun setPullToRefreshEnabled(enabled: Boolean) {
             activity.runOnUiThread { activity.setSwipeRefreshEnabled(enabled) }

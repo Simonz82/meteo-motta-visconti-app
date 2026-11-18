@@ -2,6 +2,11 @@
 
 Tutte le modifiche rilevanti all'app Android vengono registrate qui, in ordine cronologico inverso.
 
+## v1.9.7 (versionCode 56) — 2026-11
+
+### Aggiunto
+- Area riservata del sito: i pulsanti del popup "sezione riservata agli iscritti" aprono direttamente la schermata di accesso nativa (ponte `openLogin("google" | "register" | "login")`); con "google" il selettore account Google parte subito. Tornando indietro la pagina si sblocca da sola
+
 ## v1.9.6 (versionCode 55) — 2026-09-29, pubblicata su Google Play Store il 2026-10-07
 
 ### Aggiunto

@@ -31,6 +31,9 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_START_IN_REGISTER_MODE = "start_in_register_mode"
+        // Dal popup "sezione riservata" del sito (AndroidBridge.openLogin("google")):
+        // apre subito il selettore account Google, senza dover toccare il pulsante.
+        const val EXTRA_AUTO_GOOGLE = "auto_google"
     }
 
     private var isRegisterMode = false
@@ -139,6 +142,13 @@ class LoginActivity : AppCompatActivity() {
         if (intent.getBooleanExtra(EXTRA_START_IN_REGISTER_MODE, false)) {
             isRegisterMode = true
             applyMode()
+        }
+
+        // Solo al primo avvio dell'activity: se viene ricreata (rotazione, ecc.) il
+        // selettore Google e' gia' aperto o gia' chiuso dall'utente.
+        if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_AUTO_GOOGLE, false)) {
+            // post: parte dopo che la schermata e' visibile, non durante onCreate
+            loginScroll.post { signInWithGoogle(progressBar, errorText) }
         }
 
         toggleModeText.setOnClickListener {
